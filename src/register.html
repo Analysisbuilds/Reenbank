@@ -47,13 +47,12 @@
       </div>
   
       <div class="lg:col-span-6 bg-white rounded-xl p-4 sm:p-5 shadow-[0px_0px_40px_#34be82] border border-slate-100 max-w-sm mx-auto w-full">
+  <div id="register-card" class="block">
     <h2 class="text-xl font-bold text-[#34be82] mb-3">
       Register
     </h2>
   
-    <form onsubmit="event.preventDefault();" class="space-y-2.5">
-      
-      <!-- Name Input -->
+    <form id="register-form" class="space-y-2.5">
       <div class="space-y-0.5">
         <label class="block text-[10px] font-semibold text-black tracking-wide">
           Name
@@ -65,35 +64,32 @@
             class="w-full px-3 py-1.5 text-xs rounded-md border border-slate-200 focus:outline-none focus:border-[#34be82] focus:ring-1 focus:ring-[#34be82] text-slate-800 placeholder-slate-400 pr-8"
             required
           />
-          <!-- User Icon -->
+          <!-- User svg -->
           <svg class="w-3.5 h-3.5 absolute right-2.5 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
           </svg>
         </div>
       </div>
-  
-      <!-- Email Input -->
       <div class="space-y-0.5">
-        <label class="block text-[10px] font-semibold text-black  tracking-wide">
+        <label class="block text-[10px] font-semibold text-black tracking-wide">
           Email
         </label>
         <div class="relative flex items-center">
           <input 
+            id="user-email"
             type="email" 
             placeholder="Enter your Email" 
             class="w-full px-3 py-1.5 text-xs rounded-md border border-slate-200 focus:outline-none focus:border-[#34be82] focus:ring-1 focus:ring-[#34be82] text-slate-800 placeholder-slate-400 pr-8"
             required
           />
-          <!-- Email Icon -->
+          <!-- Email svg -->
           <svg class="w-3.5 h-3.5 absolute right-2.5 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
           </svg>
         </div>
       </div>
-  
-      <!-- Password Input -->
       <div class="space-y-0.5">
-        <label class="block text-[10px] font-semibold text-black  tracking-wide">
+        <label class="block text-[10px] font-semibold text-black tracking-wide">
           Password
         </label>
         <div class="relative flex items-center">
@@ -103,14 +99,13 @@
             class="w-full px-3 py-1.5 text-xs rounded-md border border-slate-200 focus:outline-none focus:border-[#34be82] focus:ring-1 focus:ring-[#34be82] text-slate-800 placeholder-slate-400 pr-8"
             required
           />
-          <!-- Lock Icon -->
+          <!-- Lock svg -->
           <svg class="w-3.5 h-3.5 absolute right-2.5 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
           </svg>
         </div>
       </div>
-  
-      <!-- Checkbox Terms & Conditions -->
+      <!-- Tick check -->
       <div class="flex items-center space-x-1.5 pt-0.5">
         <input 
           type="checkbox" 
@@ -122,22 +117,75 @@
           I agree to the <a href="#" class="text-[#34be82] hover:underline font-medium">Terms</a>, <a href="#" class="text-[#34be82] hover:underline font-medium">Privacy Policy</a> &amp; <a href="#" class="text-[#34be82] hover:underline font-medium">Fees</a>.
         </label>
       </div>
-  
-      <!-- Submit Button -->
+
       <button 
         type="submit" 
         class="w-full py-2 bg-[#34be82] hover:bg-[#2ca872] text-white font-bold text-xs rounded-md transition-colors duration-200 shadow-sm"
       >
         Register
       </button>
-  
-      <!-- Login Redirect Link -->
+
       <p class="text-[10px] text-slate-500 text-left pt-0.5">
         Already have an Account? <a href="#" class="text-[#34be82] font-semibold hover:underline">Log in</a>
       </p>
-  
     </form>
   </div>
+
+  <!-- OTP -->
+  <div id="verify-card" class="hidden">
+    <h2 class="text-xl font-bold text-[#34be82] mb-2">
+      Email Verification
+    </h2>
+
+    <p class="text-[11px] text-slate-400 mb-3 leading-tight">
+      A 6-digit code has been sent to your email <span id="display-email-text" class="text-slate-600 font-medium">us****me@gmail.com</span> 
+      <button type="button" id="back-to-register" class="text-[#34be82] font-semibold hover:underline ">change</button>
+    </p>
+
+    <form id="verify-form" class="space-y-3">
+      
+      <!-- 6 Input OTP Boxes -->
+      <div class="grid grid-cols-6 gap-1.5">
+    <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-box w-full h-9 text-center text-xs font-semibold border border-slate-200 rounded-md focus:outline-none focus:border-[#34be82] focus:ring-1 focus:ring-[#34be82] text-slate-800" required />
+    <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-box w-full h-9 text-center text-xs font-semibold border border-slate-200 rounded-md focus:outline-none focus:border-[#34be82] focus:ring-1 focus:ring-[#34be82] text-slate-800" required />
+    <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-box w-full h-9 text-center text-xs font-semibold border border-slate-200 rounded-md focus:outline-none focus:border-[#34be82] focus:ring-1 focus:ring-[#34be82] text-slate-800" required />
+    <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-box w-full h-9 text-center text-xs font-semibold border border-slate-200 rounded-md focus:outline-none focus:border-[#34be82] focus:ring-1 focus:ring-[#34be82] text-slate-800" required />
+    <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-box w-full h-9 text-center text-xs font-semibold border border-slate-200 rounded-md focus:outline-none focus:border-[#34be82] focus:ring-1 focus:ring-[#34be82] text-slate-800" required />
+    <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-box w-full h-9 text-center text-xs font-semibold border border-slate-200 rounded-md focus:outline-none focus:border-[#34be82] focus:ring-1 focus:ring-[#34be82] text-slate-800" required />
   </div>
 
+      <!-- Timer Text -->
+      <div class="text-[11px] font-semibold text-[#34be82]">
+        <span id="countdown-timer">0:45</span> remaining
+      </div>
+
+      <!-- Verify Button -->
+      <button 
+        type="submit" 
+        class="w-full py-2 bg-[#34be82] hover:bg-[#2ca872] text-white font-bold text-xs rounded-md transition-colors duration-200 shadow-sm"
+      >
+        Verify Email
+      </button>
+
+      <!-- Resend Link -->
+      <p class="text-[10px] text-slate-400 text-left pt-0.5">
+        Didn't receive the code? <button type="button" class="text-[#34be82] font-semibold hover:underline">Resend</button>
+      </p>
+    </form>
+  </div>
+
+  <div id="success-card" class="hidden py-8 px-2 text-center">
+    <p class="text-xs sm:text-sm text-slate-600 mb-6">
+      <span class="font-bold text-slate-800">Your account</span> has been created Successfully!
+    </p>
+
+    <a 
+      href="#" 
+      class="inline-block w-full py-2.5 bg-[#34be82] hover:bg-[#2ca872] text-white font-bold text-xs rounded-md transition-colors duration-200 shadow-sm"
+    >
+      Go to Dashboard
+    </a>
+  </div>
+</div>
+<script src="script.js"></script>
 </body>
