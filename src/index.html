@@ -1,13 +1,405 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="./output.css" rel="stylesheet">
-    <link rel="shortcut icon" href="/src/Assets/images/favicon.png" type="image/x-icon">
-    <title>Reenbank</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="./output.css" rel="stylesheet">
+  <title>ReenBank</title>
+  <link rel="shortcut icon" href="/src/Assets/images/favicon.png" type="image/x-icon">
 </head>
-<body>
+<body class="bg-[#d2f3e8] min-h-screen text-slate-800 flex flex-col justify-between selection:bg-[#34be82] selection:text-white font-sans">
+    <header class="sticky top-0 z-50 bg-white/0 backdrop-blur-md border-b border-white/20 w-full max-w-7xl mx-auto px-6 lg:px-12 py-6 flex items-center justify-between">
+    <div class="flex items-center gap-8 md:gap-12">
+        <a href="#" class="flex items-center gap-3 group">
+            <div class="w-36 h-8 flex items-center justify-center">
+                <img src="/src/Assets/images/logo.png" class="max-w-full max-h-full object-contain" alt="ReenBank logo">
+            </div>
+        </a>
+        
+    <nav class="hidden md:flex items-center space-x-8 text-gray-700 font-medium">
+            <a href="#about" class="hover:text-[#288F69] transition-colors">About</a>
+            <a href="#contact" class="hover:text-[#288F69] transition-colors">Contact Us</a>
+        </nav>
+    </div>
+
+    <div class="hidden md:block">
+        <a href="#login" class="px-6 py-2.5 border-2 border-[#34be82] text-[#34be82] font-semibold rounded-lg hover:bg-[#288F69] hover:border-[#288F69] hover:text-white transition-all duration-200 inline-block">
+            Login
+        </a>
+    </div>
+
+    <!-- Mobile hambuger -->
+    <button id="menu-btn" class="md:hidden text-black focus:outline-none" aria-label="Toggle Navigation">
+      <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+  </header>
+
+  <!-- Mobile menu-->
+  <div id="mobile-menu" class="hidden md:hidden fixed top-18 inset-x-0 z-50 bg-[#d2f3e8] backdrop-blur   px-6 pb-6 pt-2 space-y-4 border-b border-emerald-200">
+    <a href="#about" class="block text-gray-700 font-medium hover:text-[#34be82]">About</a>
+    <a href="#contact" class="block text-gray-700 font-medium hover:text-[#34be82]">Contact Us</a>
+    <a href="#login" class="block text-center w-full py-2.5 border-2 border-[#34be82] text-[#34be82] font-semibold rounded-lg hover:bg-[#288F69] hover:border-[#288F69] hover:text-white transition-all duration-200">
+      Login
+    </a>
+  </div>
+
+  <main class="flex-1 w-full max-w-7xl mx-auto px-6 lg:px-12 flex flex-col-reverse lg:flex-row items-center justify-between gap-12 py-8 lg:py-16 pt-1 pb-8 lg:pt-2 lg:pb-16 mb-1">
+    <div class="w-full lg:w-1/2 space-y-6 text-left">
+      <span class="text-[#34be82] font-semibold text-lg lg:text-xl tracking-wide block mb-0.5" >
+        Reen Bank
+      </span>
+      
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-[1.15] tracking-tight">
+        Experience <br class="hidden sm:inline" />hassle-free banking
+      </h1>
+      
+      <p class="text-slate-600 text-base sm:text-lg max-w-lg leading-relaxed pt-2">
+        Experience simple, secure, and stress-free banking. Say goodbye to long queues and complex procedures and hello to hassle-free banking with Reen Bank.
+      </p>
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-4">
+        <a href="#get-started" class="px-8 py-3.5 bg-[#34be82] text-white font-semibold rounded-lg hover:bg-[#288F69] shadow-lg shadow-emerald-600/20 text-center transition-all duration-200 hover:-translate-y-0.5">
+          Get Started
+        </a>
+        <a href="#learn-more" class="px-8 py-3.5 border-2 border-[#34be82] text-[#34be82] font-semibold rounded-lg hover:bg-[#288F69] hover:border-[#288F69] hover:text-white text-center transition-all duration-200 flex items-center justify-center gap-2 group">
+          <span>Learn More</span>
+          <span class="group-hover:translate-x-1 transition-transform duration-200">&rarr;</span>
+        </a>
+      </div>
+    </div>
+    <div class="w-full lg:w-1/2 flex justify-center items-center relative">
+      <div class="w-full max-w-md lg:max-w-xl relative transition-transform duration-300 hover:scale-[1.02]">
+        <img 
+          src="/src/Assets/images/Reen_Bank_Credit_Card_Mockup_v01 1.png" 
+          alt="Reen Bank ATM Cards Showcase" 
+          class="w-full h-auto object-contain drop-shadow-2xl pointer-events-none select-none"/>
+      </div>
+    </div>
+  </main>
+
+  <section id="services" class="w-full bg-white py-16 lg:py-24">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
     
+    <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-12 lg:mb-16">
+      Services
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-12 lg:gap-y-16">
+      <div class="flex items-start gap-5">
+        <div class="w-12 h-12 shrink-0 flex items-center justify-center">
+          <img 
+            src="/src/Assets/images/savings 1.png" 
+            alt="Savings accounts icon" 
+            class="w-full h-full object-contain"
+          />
+        </div>
+        <div>
+          <h3 class="text-xl font-bold text-[#34be82] mb-2">Savings accounts</h3>
+          <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
+            Reen Bank could offer a variety of savings accounts with different interest rates and terms, allowing customers to save money and earn interest over time. These accounts could include features like automatic transfers, overdraft protection, and mobile banking access.
+          </p>
+        </div>
+      </div>
+
+      <!-- 2. Personal Loans -->
+      <div class="flex items-start gap-5">
+        <div class="w-12 h-12 shrink-0 flex items-center justify-center">
+          <img 
+            src="/src/Assets/images/personal 1.png" 
+            alt="Personal loans icon" 
+            class="w-full h-full object-contain"
+          />
+        </div>
+        <div>
+          <h3 class="text-xl font-bold text-[#34be82] mb-2">Personal loans</h3>
+          <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
+            Reen Bank could offer personal loans for a variety of purposes, such as debt consolidation, home improvements, or major purchases. Customers could apply online and receive a decision quickly, with flexible repayment terms and competitive interest rates.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-5">
+        <div class="w-12 h-12 shrink-0 flex items-center justify-center">
+          <img 
+            src="/src/Assets/images/credit-card 1.png" 
+            alt="Credit cards icon" 
+            class="w-full h-full object-contain"
+          />
+        </div>
+        <div>
+          <h3 class="text-xl font-bold text-[#34be82] mb-2">Credit cards</h3>
+          <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
+            Reen Bank could offer credit cards with different rewards programs and benefits, such as cash back, travel rewards, or low interest rates. Customers could manage their cards online and receive alerts for suspicious activity or due dates.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-5">
+        <div class="w-12 h-12 shrink-0 flex items-center justify-center">
+          <img 
+            src="/src/Assets/images/money 1.png" 
+            alt="Investment services icon" 
+            class="w-full h-full object-contain"
+          />
+        </div>
+        <div>
+          <h3 class="text-xl font-bold text-[#34be82] mb-2">Investment services</h3>
+          <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
+            Reen Bank could offer investment services for customers looking to grow their wealth over time. These services could include mutual funds, exchange-traded funds, and other investment vehicles, with access to professional financial advice and analysis.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-5">
+        <div class="w-12 h-12 shrink-0 flex items-center justify-center">
+          <img 
+            src="/src/Assets/images/bill 1.png" 
+            alt="Online bill pay icon" 
+            class="w-full h-full object-contain"
+          />
+        </div>
+        <div>
+          <h3 class="text-xl font-bold text-[#34be82] mb-2">Online bill pay</h3>
+          <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
+            Reen Bank could offer a convenient online bill pay service, allowing customers to pay bills and manage expenses from their computer or mobile device. This service could include features like automatic payments, bill reminders, and customizable payment schedules.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-5">
+        <div class="w-12 h-12 shrink-0 flex items-center justify-center">
+          <img 
+            src="/src/Assets/images/deal 1.png" 
+            alt="Business banking icon" 
+            class="w-full h-full object-contain"
+          />
+        </div>
+        <div>
+          <h3 class="text-xl font-bold text-[#34be82] mb-2">Business banking</h3>
+          <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
+            Reen Bank could offer a range of banking services for small and medium-sized businesses, including checking accounts, business loans, merchant services, and cash management tools. These services could help businesses streamline their financial operations and grow their operations over time.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQs SECTION -->
+<section id="faqs" class="w-full bg-[#d2f3e8] py-16 lg:py-24 relative overflow-hidden lg:mt-0.5 lg:pt-10">
+  
+  <!-- Decorative Watermark Question Mark -->
+  <div class="absolute -right-2 bottom-40 pointer-events-none select-none opacity-5 text-[350px] font-extrabold text-slate-700 leading-none lg:-right-2 lg:bottom-40">
+    ?
+  </div>
+
+  <div class="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
+    <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-12">
+      FAQs
+    </h2>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+      
+      <!-- LEFT DISPLAY AREA (Active Selected FAQ) -->
+      <div class="lg:col-span-6 space-y-6 min-h-55 transition-opacity duration-300" id="faq-display">
+        <h3 id="active-faq-title" class="text-2xl sm:text-3xl font-bold text-[#34be82] underline decoration-[#34be82] underline-offset-8 leading-snug">
+          How can I access my Reen Bank account online?
+        </h3>
+        <p id="active-faq-answer" class="text-slate-700 leading-relaxed text-sm sm:text-base pt-2">
+          You can access your Reen Bank account online by logging into our secure online banking platform using your username and password. From there, you can view your account balances, transfer funds, pay bills, and more.
+        </p>
+      </div>
+
+      <!-- RIGHT SIDEBAR (Interactive FAQ Navigation List) -->
+      <div class="lg:col-span-6 space-y-4">
+        
+        <!-- FAQ Item 1 -->
+        <button 
+          class="faq-nav-btn w-full flex items-center justify-between text-left p-3 rounded-lg font-semibold text-slate-800 hover:text-[#34be82] transition-colors group"
+          data-title="How can I access my Reen Bank account online?"
+          data-answer="You can access your Reen Bank account online by logging into our secure online banking platform using your username and password. From there, you can view your account balances, transfer funds, pay bills, and more."
+        >
+          <span class="group-hover:translate-x-1 transition-transform duration-200">How can I access my Reen Bank account online?</span>
+          <span class="text-slate-900 text-lg font-bold ml-4">&rarr;</span>
+        </button>
+
+        <!-- FAQ Item 2 -->
+        <button 
+          class="faq-nav-btn w-full flex items-center justify-between text-left p-3 rounded-lg font-semibold text-slate-800 hover:text-[#34be82] transition-colors group"
+          data-title="How do I sign up for an account with Reen Bank?"
+          data-answer="You can sign up for an account with Reen Bank online by visiting our website and filling out the online application form. Once your application is approved, you will receive instructions for setting up your account and accessing our online banking platform."
+        >
+          <span class="group-hover:translate-x-1 transition-transform duration-200">How do I sign up for an account with Reen Bank?</span>
+          <span class="text-slate-900 text-lg font-bold ml-4">&rarr;</span>
+        </button>
+
+        <!-- FAQ Item 3 -->
+        <button 
+          class="faq-nav-btn w-full flex items-center justify-between text-left p-3 rounded-lg font-semibold text-slate-800 hover:text-[#34be82] transition-colors group"
+          data-title="What types of accounts does Reen Bank offer?"
+          data-answer="Reen Bank offers a wide array of financial products including checking accounts, savings accounts, certificate of deposits (CDs), credit cards, and business banking solutions tailored to your individual needs."
+        >
+          <span class="group-hover:translate-x-1 transition-transform duration-200">What types of accounts does Reen Bank offer?</span>
+          <span class="text-slate-900 text-lg font-bold ml-4">&rarr;</span>
+        </button>
+
+        <!-- FAQ Item 4 -->
+        <button 
+          class="faq-nav-btn w-full flex items-center justify-between text-left p-3 rounded-lg font-semibold text-slate-800 hover:text-[#34be82] transition-colors group"
+          data-title="Is Reen Bank FDIC insured?"
+          data-answer="Yes, Reen Bank is fully FDIC insured. Your deposits are protected up to the allowable maximum legal limit per depositor, providing you with peace of mind."
+        >
+          <span class="group-hover:translate-x-1 transition-transform duration-200">Is Reen Bank FDIC insured?</span>
+          <span class="text-slate-900 text-lg font-bold ml-4">&rarr;</span>
+        </button>
+
+        <!-- FAQ Item 5 -->
+        <button 
+          class="faq-nav-btn w-full flex items-center justify-between text-left p-3 rounded-lg font-semibold text-slate-800 hover:text-[#34be82] transition-colors group"
+          data-title="What security measures does Reen Bank have in place to protect my financial information?"
+          data-answer="Reen Bank takes the security of your financial information seriously and has a number of measures in place to protect against unauthorized access and fraud. These measures include encryption, two-factor authentication, fraud detection, and regular security updates and monitoring."
+        >
+          <span class="group-hover:translate-x-1 transition-transform duration-200">What security measures does Reen Bank have in place to protect my financial information?</span>
+          <span class="text-slate-900 text-lg font-bold ml-4">&rarr;</span>
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="w-full bg-white py-12 border-t border-slate-100">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12 text-center">
+    
+    <h3 class="text-lg sm:text-xl font-bold text-slate-800 mb-8">
+      Supported by various finance services
+    </h3>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-y-8 gap-x-6 max-w-4xl mx-auto items-center justify-items-center">
+      <div class="shrink-0 flex items-center justify-center h-10 w-24 sm:w-28">
+        <img 
+          src="/src/Assets/images/Mastercard_2019_logo 2.png" 
+          alt="Mastercard" 
+          class="h-full w-auto object-contain"
+        />
+      </div>
+      <div class="shrink-0 flex items-center justify-center h-10 w-24 sm:w-28">
+        <img 
+          src="/src/Assets/images/visa.png" 
+          alt="Visa" 
+          class="h-full w-auto object-contain"
+        />
+      </div>
+      <div class="shrink-0 flex items-center justify-center h-10 w-24 sm:w-28">
+        <img 
+          src="/src/Assets/images/PayPal-Logo 1.png" 
+          alt="PayPal" 
+          class="h-full w-auto object-contain"
+        />
+      </div>
+      <div class="shrink-0 flex items-center justify-center h-10 w-28 sm:w-36">
+        <img 
+          src="/src/Assets/images/Payoneer_logo 1.png" 
+          alt="Payoneer" 
+          class="h-full w-auto object-contain"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<footer class="w-full bg-[#d2f3e8] text-slate-800 py-12 lg:py-16">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+      <div class="lg:col-span-5 flex flex-col justify-between py-2 space-y-12">
+        <div class="grid grid-cols-2 gap-8">
+          
+          <!-- Help Center -->
+          <div class="space-y-3">
+            <h4 class="text-[#34be82] font-bold text-sm tracking-wider uppercase">HELP</h4>
+            <ul class="space-y-2 text-sm font-medium text-slate-700">
+              <li><a href="#" class="hover:text-[#34be82] transition-colors">Help Center</a></li>
+              <li><a href="#contact" class="hover:text-[#34be82] transition-colors">Contact Us</a></li>
+              <li><a href="#" class="hover:text-[#34be82] transition-colors">How to Use</a></li>
+            </ul>
+          </div>
+
+          <!-- Abiout center -->
+          <div class="space-y-3">
+            <h4 class="text-[#34be82] font-bold text-sm tracking-wider uppercase">ABOUT</h4>
+            <ul class="space-y-2 text-sm font-medium text-slate-700">
+              <li><a href="#about" class="hover:text-[#34be82] transition-colors">About Reem Bank</a></li>
+              <li><a href="#" class="hover:text-[#34be82] transition-colors">Terms &amp; Conditions</a></li>
+              <li><a href="#" class="hover:text-[#34be82] transition-colors">Privacy Policy</a></li>
+            </ul>
+          </div>
+
+        </div>
+        <div class="space-y-6">
+          <div class="flex items-center space-x-3">
+            <img 
+              src="/src/Assets/images/logo.png" 
+              alt="Reen Bank Logo" 
+              class="w-30 h-10 object-contain"
+            />
+          </div>
+          <p class="text-xs text-slate-600 font-medium hidden sm:block">
+            2026 ReenBank. All rights reserved!
+          </p>
+          <div class="flex items-center space-x-3">
+            <!-- Facebook svg -->
+            <a href="#" class="w-8 h-8 rounded-full bg-[#34be82] text-white flex items-center justify-center hover:text-black hover:opacity-90 transition-opacity">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H7.5v-3H10V9.5C10 7.01 11.49 5.6 13.73 5.6c1.07 0 2.19.19 2.19.19v2.41h-1.23c-1.23 0-1.61.77-1.61 1.56V12h2.72l-.43 3h-2.29v6.8c4.56-.93 8-4.96 8-9.8z"/></svg>
+            </a>
+            <!-- Instagram svg -->
+            <a href="#" class="w-8 h-8 rounded-full bg-[#34be82] text-white flex items-center justify-center hover:text-black hover:opacity-90 transition-opacity">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+            <!-- Twitter svg-->
+            <a href="#" class="w-8 h-8 rounded-full bg-[#34be82] text-white flex items-center justify-center hover:text-black hover:opacity-90 transition-opacity">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+      <div 
+        class="lg:col-span-7 relative rounded-tl-[60px] sm:rounded-tl-[80px] rounded-br-2xl rounded-tr-2xl rounded-bl-2xl overflow-hidden bg-cover bg-center p-8 sm:p-12 text-white flex flex-col justify-center min-h-90"
+        style="background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url('/src/Assets/images/Rectangle\ 159.png');"
+      >
+        <div class="max-w-xl space-y-6">
+          <p class="text-base sm:text-lg font-medium text-slate-200">
+            New to Reem Bank?
+          </p>
+          <h3 class="text-3xl sm:text-5xl font-extrabold leading-tight tracking-tight">
+            Enter your Email and Get Started Now
+          </h3>
+          <form onsubmit="event.preventDefault();" class="flex flex-col sm:flex-row items-stretch gap-3 pt-4">
+            <input 
+              type="email" 
+              placeholder="Enter your Email" 
+              class="w-full px-5 py-3.5 rounded-lg bg-black border border-gray-500 text-white placeholder-slate-400 focus:outline-none focus:border-[#34be82] backdrop-blur-sm"
+              required
+            />
+            <button 
+              type="submit" 
+              class="shrink-0 px-8 py-3.5 bg-[#34be82] hover:bg-[#288F69] text-white font-semibold rounded-lg transition-colors duration-200"
+            >
+              Get Started
+            </button>
+          </form>
+        </div>
+      </div>
+        <p class="text-xs text-black font-medium sm:hidden text-center justify-center mt-0.5">
+            2026 ReenBank. All rights reserved!
+        </p>
+    </div>
+  </div>
+</footer>
+
+
+<script src="script.js"></script>
 </body>
 </html>
