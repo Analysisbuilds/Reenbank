@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const triggerLogoutBtn = document.getElementById('logout-btn');
   const cancelLogoutBtn = document.getElementById('cancel-logout-btn');
 
-  // Safely open modal
+  // pop up triger
   if (triggerLogoutBtn && logoutModal && logoutModalCard) {
     triggerLogoutBtn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Helper to close modal
+  // close pop oup
   const closeModal = () => {
     if (logoutModal && logoutModalCard) {
       logoutModal.classList.add('opacity-0', 'pointer-events-none');
@@ -167,10 +167,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Close modal when clicking 'Cancel'
+  //  click triger 'Cancel'
   cancelLogoutBtn?.addEventListener('click', closeModal);
 
-  // Close modal when clicking dark backdrop
+  // Close by tap anywhere
   logoutModal?.addEventListener('click', (e) => {
     if (e.target === logoutModal) closeModal();
   });
