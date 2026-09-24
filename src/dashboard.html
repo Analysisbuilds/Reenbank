@@ -58,15 +58,50 @@
 
       <!-- Logout  -->
       <div class="pt-4 mt-auto">
-        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-500 hover:text-red-500 transition-colors">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <line x1="19" y1="12" x2="5" y2="12" stroke-width="2" stroke-linecap="round"/>
-            <polyline points="12 19 5 12 12 5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <span>Logout</span>
-        </a>
+        <button 
+        type="button" 
+        onclick="document.getElementById('logout-modal').classList.remove('hidden');"
+        class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-500 hover:text-red-500 transition-colors cursor-pointer text-left">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <line x1="19" y1="12" x2="5" y2="12" stroke-width="2" stroke-linecap="round"/>
+          <polyline points="12 19 5 12 12 5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>Logout</span>
+      </button>
+    </div>
+    
+    <!-- logout pop uop -->
+    <div 
+      id="logout-modal" 
+      onclick="if(event.target === this) this.classList.add('hidden');"
+      class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs hidden items-center justify-center p-4 z-50 flex"
+      >
+      <div class="bg-white shadow-[0px_0px_40px_#34be82] rounded-3xl p-8 max-w-sm w-full ">
+        
+        <p class="text-slate-600 text-sm font-medium text-center mb-8">
+          Are you sure you want to Logout?
+        </p>
+
+        <div class="flex items-center justify-center space-x-4">
+          <button 
+            type="button" 
+            onclick="document.getElementById('logout-modal').classList.add('hidden');" 
+            class="w-1/2 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs rounded-lg transition-colors cursor-pointer"
+          >
+            Cancel
+          </button>
+      
+          <a 
+            href="login.html" 
+            class="w-1/2 py-2.5 bg-[#34be82] hover:bg-[#2ca872] text-white font-bold text-xs rounded-lg text-center transition-colors shadow-sm cursor-pointer block"
+          >
+            Logout
+          </a>
+        </div>
+    
       </div>
-    </aside>
+    </div>
+</aside>
 
     <main class="flex-1 flex flex-col min-w-0 h-full overflow-y-auto lg:overflow-hidden p-4 sm:p-6 lg:p-8 space-y-6">
       <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 shrink-0">

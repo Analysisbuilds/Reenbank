@@ -141,3 +141,37 @@ document.getElementById('login-form').addEventListener('submit', function(e) {
   // Redirect to dashboard page
   window.location.href = 'dashboard.html';
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  const logoutModal = document.getElementById('logout-modal');
+  const logoutModalCard = document.getElementById('logout-modal-card');
+  const triggerLogoutBtn = document.getElementById('logout-btn');
+  const cancelLogoutBtn = document.getElementById('cancel-logout-btn');
+
+  // Safely open modal
+  if (triggerLogoutBtn && logoutModal && logoutModalCard) {
+    triggerLogoutBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      logoutModal.classList.remove('opacity-0', 'pointer-events-none');
+      logoutModalCard.classList.remove('scale-95');
+      logoutModalCard.classList.add('scale-100');
+    });
+  }
+
+  // Helper to close modal
+  const closeModal = () => {
+    if (logoutModal && logoutModalCard) {
+      logoutModal.classList.add('opacity-0', 'pointer-events-none');
+      logoutModalCard.classList.remove('scale-100');
+      logoutModalCard.classList.add('scale-95');
+    }
+  };
+
+  // Close modal when clicking 'Cancel'
+  cancelLogoutBtn?.addEventListener('click', closeModal);
+
+  // Close modal when clicking dark backdrop
+  logoutModal?.addEventListener('click', (e) => {
+    if (e.target === logoutModal) closeModal();
+  });
+});
