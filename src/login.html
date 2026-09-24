@@ -50,7 +50,7 @@
       Login
     </h2>
   
-    <form onsubmit="event.preventDefault();" class="space-y-2.5">
+    <form id="login-form" class="space-y-2.5">
       <div class="space-y-0.5">
         <label class="block text-[10px] font-semibold text-black  tracking-wide">
           Email
@@ -102,17 +102,16 @@
           </div>
       <button 
         type="submit" 
-        class="w-full py-2 bg-[#34be82] hover:bg-[#2ca872] text-white font-bold text-xs rounded-md transition-colors duration-200 shadow-sm">
-        Login
+        class="w-full py-2 bg-[#34be82] hover:bg-[#2ca872] text-white font-bold text-xs rounded-md transition-colors duration-200 shadow-sm cursor-pointer">
+        Login   
       </button>
   
-      <!-- Login Redirect Link -->
+      <!-- Register Redirect Link -->
       <p class="text-[10px] text-slate-500 text-left pt-0.5">
         Don't have an Account? <a href="register.html" class="text-[#34be82] font-semibold hover:underline">Register</a>
       </p>
-  
     </form>
   </div>
-  </div>
+</div>
 <script src="script.js"></script>
 </body>

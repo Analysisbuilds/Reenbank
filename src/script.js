@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const successCard = document.getElementById('success-card');
 
     // Switch when submit
-    registerForm.addEventListener('submit', (e) => {
+    registerForm?.addEventListener('submit', (e) => {
       e.preventDefault();
 
       // asterik in  email
@@ -127,8 +127,17 @@ togglePasswordBtn.addEventListener('click', () => {
   eyeOffIcon.classList.toggle('hidden', !isPassword);
 });
 
-document.getElementById('signup-form').addEventListener('submit', function(event) {
+document.getElementById('signup-form')?.addEventListener('submit', function(event) {
   event.preventDefault();
   const email = this.querySelector('input[type="email"]').value;
   window.location.href = `register.html?email=${encodeURIComponent(email)}`;
+});
+
+document.getElementById('login-form').addEventListener('submit', function(e) {
+  e.preventDefault(); // Prevents default browser refresh
+
+  //  validation or API login requests (later)
+  
+  // Redirect to dashboard page
+  window.location.href = 'dashboard.html';
 });
