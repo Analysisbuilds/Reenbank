@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     feather.replace();
   }
 
-  // notification
+  // notifications
   const notificationBtn = document.getElementById('notification-btn');
   const notificationDropdown = document.getElementById('notification-dropdown');
 
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // date dropdow
+  // date dropdown
   const dateBtn = document.getElementById('date-dropdown-btn');
   const dateMenu = document.getElementById('date-dropdown-menu');
   const dateChevron = document.getElementById('date-chevron');
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // stat dropdown
+  // statistics dropdown
   const statsBtn = document.getElementById('stats-dropdown-btn');
   const statsMenu = document.getElementById('stats-dropdown-menu');
   const statsChevron = document.getElementById('stats-chevron');
@@ -80,7 +80,7 @@ if (toggleBalanceBtn) {
     toggleBalanceBtn.addEventListener('click', () => {
         balancesVisible = !balancesVisible;
 
-        // 1. Toggle the visibility icons
+        // Toggle the visibility icons
         if (balancesVisible) {
             eyeIcon.classList.add('hidden');
             eyeOffIcon.classList.remove('hidden');
@@ -89,7 +89,7 @@ if (toggleBalanceBtn) {
             eyeOffIcon.classList.add('hidden');
         }
 
-        // 2. Toggle the actual text values
+        // Toggle the actual text values
         balanceTexts.forEach(el => {
             if (!balancesVisible) {
                 el.dataset.original = el.textContent;
@@ -118,7 +118,7 @@ if (toggleBalanceBtn) {
     });
   }
 
-  // click outside to close open drop dow n
+  // click outside to close open drop down
   document.addEventListener('click', () => {
     closeOtherDropdowns(null);
   });

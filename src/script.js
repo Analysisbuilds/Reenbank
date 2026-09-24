@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
       verifyCard.classList.add('block');
     });
 
-    // Step 2 -> Step 3 (Verify Email -> Success Screen)
+    //(Verify Email -> Success Screen)
     verifyForm.addEventListener('submit', (e) => {
       e.preventDefault();
 
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
       registerCard.classList.add('block');
     });
 
-    // Auto - next input for OTP digits
+    // Auto - next input for OTP digit
     const otpBoxes = document.querySelectorAll('.otp-box');
     otpBoxes.forEach((box, idx) => {
     box.addEventListener('focus', () => box.select());
@@ -134,9 +134,9 @@ document.getElementById('signup-form')?.addEventListener('submit', function(even
 });
 
 document.getElementById('login-form').addEventListener('submit', function(e) {
-  e.preventDefault(); // Prevents default browser refresh
+  e.preventDefault(); // no default browser reload
 
-  //  validation or API login requests (later)
+  //  validation or API login requests (later) {Backend}
   
   // Redirect to dashboard page
   window.location.href = 'dashboard.html';
