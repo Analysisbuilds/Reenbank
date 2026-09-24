@@ -89,18 +89,39 @@ document.addEventListener('DOMContentLoaded', () => {
       registerCard.classList.add('block');
     });
 
-    // Auto focus next input for OTP digits
+    // Auto - next input for OTP digits
     const otpBoxes = document.querySelectorAll('.otp-box');
     otpBoxes.forEach((box, idx) => {
-      box.addEventListener('input', (e) => {
-        if (e.target.value.length === 1 && idx < otpBoxes.length - 1) {
-          otpBoxes[idx + 1].focus();
-        }
-      });
-      box.addEventListener('keydown', (e) => {
-        if (e.key === 'Backspace' && !e.target.value && idx > 0) {
-          otpBoxes[idx - 1].focus();
-        }
-      });
+    box.addEventListener('focus', () => box.select());
+    box.addEventListener('click', () => box.select());
+
+    box.addEventListener('keyup', (e) => {
+      if (['Tab', 'Shift', 'Meta', 'Control', 'Alt'].includes(e.key)) return;
+      if (box.value.length === 1 && idx < otpBoxes.length - 1 && e.key !== 'Backspace') {
+        otpBoxes[idx + 1].focus();
+      }
+    });
+
+    box.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' && !box.value && idx > 0) {
+        otpBoxes[idx - 1].focus();
+      }
     });
   });
+});
+
+const passwordInput = document.getElementById('password-input');
+const togglePasswordBtn = document.getElementById('toggle-password');
+const eyeIcon = document.getElementById('eye-icon');
+const eyeOffIcon = document.getElementById('eye-off-icon');
+
+togglePasswordBtn.addEventListener('click', () => {
+  const isPassword = passwordInput.getAttribute('type') === 'password';
+  
+  // Switch input type
+  passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+  
+  // Toggle icon visibility
+  eyeIcon.classList.toggle('hidden', isPassword);
+  eyeOffIcon.classList.toggle('hidden', !isPassword);
+});

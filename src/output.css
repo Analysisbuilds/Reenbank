@@ -8,6 +8,7 @@
       "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
+    --color-emerald-100: oklch(95% 0.052 163.051);
     --color-emerald-200: oklch(90.5% 0.093 164.15);
     --color-emerald-600: oklch(59.6% 0.145 163.225);
     --color-slate-100: oklch(96.8% 0.007 247.896);
@@ -270,6 +271,9 @@
   .right-3 {
     right: calc(var(--spacing) * 3);
   }
+  .right-7 {
+    right: calc(var(--spacing) * 7);
+  }
   .right-8 {
     right: calc(var(--spacing) * 8);
   }
@@ -426,6 +430,9 @@
   .h-12 {
     height: calc(var(--spacing) * 12);
   }
+  .h-14 {
+    height: calc(var(--spacing) * 14);
+  }
   .h-32 {
     height: calc(var(--spacing) * 32);
   }
@@ -476,6 +483,9 @@
   }
   .w-12 {
     width: calc(var(--spacing) * 12);
+  }
+  .w-14 {
+    width: calc(var(--spacing) * 14);
   }
   .w-20 {
     width: calc(var(--spacing) * 20);
@@ -555,6 +565,9 @@
   .-translate-x-2 {
     --tw-translate-x: calc(var(--spacing) * -2);
     translate: var(--tw-translate-x) var(--tw-translate-y);
+  }
+  .cursor-pointer {
+    cursor: pointer;
   }
   .resize {
     resize: both;
@@ -830,6 +843,9 @@
   .bg-black {
     background-color: var(--color-black);
   }
+  .bg-emerald-100 {
+    background-color: var(--color-emerald-100);
+  }
   .bg-slate-900 {
     background-color: var(--color-slate-900);
   }
@@ -991,6 +1007,9 @@
   }
   .pr-10 {
     padding-right: calc(var(--spacing) * 10);
+  }
+  .pr-20 {
+    padding-right: calc(var(--spacing) * 20);
   }
   .pb-0 {
     padding-bottom: 0px;
@@ -1340,6 +1359,9 @@
     }
     .hover\:text-black:hover {
       color: var(--color-black);
+    }
+    .hover\:text-slate-600:hover {
+      color: var(--color-slate-600);
     }
     .hover\:text-slate-900:hover {
       color: var(--color-slate-900);
