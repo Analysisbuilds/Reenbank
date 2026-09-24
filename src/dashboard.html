@@ -37,7 +37,7 @@
             <span>Accounts</span>
           </a>
 
-          <!-- Transactions Link (Mobile view toggle) -->
+          <!-- Transactions  (Mobile view ) -->
           <a href="#" id="nav-transactions" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-500 hover:text-slate-800 hover:bg-slate-100/60 transition-all">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 1l4 4m0 0l-4 4m4-4H3m7 18l-4-4m0 0l4-4m-4 4h18" />
@@ -70,7 +70,7 @@
       </button>
     </div>
     
-    <!-- logout pop uop -->
+    <!-- logout pop up -->
     <div 
       id="logout-modal" 
       onclick="if(event.target === this) this.classList.add('hidden');"
@@ -116,9 +116,10 @@
 
         <!-- Search & Profile area -->
         <div class="flex items-center space-x-3">
-          <!-- Search Input  -->
+
+          <!-- Search space  -->
           <div class="relative flex items-center">
-            <!-- Search Icon -->
+            <!-- Search svg -->
             <svg class="w-4 h-4 absolute left-3 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <circle cx="11" cy="11" r="8" stroke-width="2" />
               <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-width="2" stroke-linecap="round" />
@@ -130,7 +131,7 @@
             />
           </div>
 
-          <!-- Notification Bell Dropdown Button -->
+          <!-- Notification Bell Click to Dropdown  Button -->
           <div class="relative">
             <button 
               id="notification-btn" 
@@ -165,7 +166,7 @@
             </div>
           </div>
 
-          <!-- User  Image  -->
+          <!-- profile Image  -->
            
           <div class="w-9 h-9 rounded-full overflow-hidden border border-slate-200 bg-slate-200 shrink-0">
             <a href="profile.html">
@@ -185,13 +186,13 @@
               <h2 class="text-sm font-bold text-slate-800">Current Account Balance</h2>
               
               <div class="flex items-center space-x-2">
-                <!-- Eye Toggle / Hide Balance Button -->
+                <!-- Eye Toggle that Hide Balance  -->
                 <button id="toggle-balance-btn" class="p-1.5 bg-[#EFEFEF] text-slate-700 hover:text-slate-700  hover:bg-slate-200 rounded-md">
                   <!-- Eye Off Icon -->
                   <svg id="eye-off-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908A8.962 8.962 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21M3 3l18 18" />
                   </svg>
-                  <!-- Eye Open Icon -->
+                  <!-- Eye Open Icon that open balance -->
                   <svg id="eye-icon" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -204,7 +205,7 @@
                     id="date-dropdown-btn" 
                     class="flex items-center space-x-2 bg-[#EFEFEF] px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-200 transition-colors"
                   >
-                    <!-- Calendar Icon -->
+                    <!-- Calendar svg -->
                     <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke-width="2"/>
                       <line x1="16" y1="2" x2="16" y2="6" stroke-width="2"/>
