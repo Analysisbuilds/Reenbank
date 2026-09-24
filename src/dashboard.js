@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     feather.replace();
   }
 
-  // ==================== 1. NOTIFICATION DROPDOWN TOGGLE ====================
+  // notification
   const notificationBtn = document.getElementById('notification-btn');
   const notificationDropdown = document.getElementById('notification-dropdown');
 
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ==================== 2. DATE RANGE DROPDOWN TOGGLE ====================
+  // date dropdow
   const dateBtn = document.getElementById('date-dropdown-btn');
   const dateMenu = document.getElementById('date-dropdown-menu');
   const dateChevron = document.getElementById('date-chevron');
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ==================== 3. STATISTICS DROPDOWN TOGGLE ====================
+  // stat dropdown
   const statsBtn = document.getElementById('stats-dropdown-btn');
   const statsMenu = document.getElementById('stats-dropdown-menu');
   const statsChevron = document.getElementById('stats-chevron');
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ==================== 4. BALANCE VISIBILITY EYE TOGGLE ====================
+  //  eye toggle on dashboard
 const toggleBalanceBtn = document.getElementById('toggle-balance-btn');
 const eyeIcon = document.getElementById('eye-icon');
 const eyeOffIcon = document.getElementById('eye-off-icon');
@@ -102,7 +102,7 @@ if (toggleBalanceBtn) {
 }
 
 
-  // ==================== 5. MOBILE TRANSACTIONS PANEL TOGGLE ====================
+  // Mobile trnx panel
   const navTransactionsBtn = document.getElementById('nav-transactions');
   const transactionsPanel = document.getElementById('transactions-panel');
 
@@ -118,7 +118,7 @@ if (toggleBalanceBtn) {
     });
   }
 
-  // ==================== 6. GLOBAL OUTSIDE CLICK CLOSE ====================
+  // click outside to close open drop dow n
   document.addEventListener('click', () => {
     closeOtherDropdowns(null);
   });
