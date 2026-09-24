@@ -1,0 +1,419 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="./output.css" rel="stylesheet">
+  <title>Dashboared</title>
+  <link rel="shortcut icon" href="/src/Assets/images/favicon.png" type="image/x-icon">
+</head>
+
+<body class="bg-[#F6FAF7] text-slate-800 antialiased font-sans  h-screen w-screen overflow-x-hidden lg:overflow-hidden">
+  <div class="flex h-full w-full flex-col lg:flex-row">
+    <aside class="w-full lg:w-64 bg-[#F6FAF7] p-5 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-slate-200/60 shrink-0">
+      <div>
+        <div class="flex items-center space-x-3 mb-8">
+          <div class="">
+             <img src="Assets/images/logo.png" alt="Reen Bank Logo" class="w-30 h-10 object-contain ml-4 mt-4" /> 
+          </div>
+        </div>
+        <nav class="space-y-1">
+          <a href="#" id="nav-overview" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold text-[#34be82] bg-emerald-50/80 transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <rect x="3" y="3" width="7" height="7" rx="1.5" stroke-width="2"/>
+              <rect x="14" y="3" width="7" height="7" rx="1.5" stroke-width="2"/>
+              <rect x="14" y="14" width="7" height="7" rx="1.5" stroke-width="2"/>
+              <rect x="3" y="14" width="7" height="7" rx="1.5" stroke-width="2"/>
+            </svg>
+            <span>Overview</span>
+          </a>
+
+          <!-- Acocunt  -->
+          <a href="#" id="nav-accounts" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-500 hover:text-slate-800 hover:bg-slate-100/60 transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <rect x="2" y="5" width="20" height="14" rx="2" stroke-width="2"/>
+              <line x1="2" y1="10" x2="22" y2="10" stroke-width="2"/>
+            </svg>
+            <span>Accounts</span>
+          </a>
+
+          <!-- Transactions Link (Mobile view toggle) -->
+          <a href="#" id="nav-transactions" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-500 hover:text-slate-800 hover:bg-slate-100/60 transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 1l4 4m0 0l-4 4m4-4H3m7 18l-4-4m0 0l4-4m-4 4h18" />
+            </svg>
+            <span>Transactions</span>
+          </a>
+
+          <!-- Profile  -->
+          <a href="#" id="nav-profile" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-500 hover:text-slate-800 hover:bg-slate-100/60 transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+              <circle cx="12" cy="7" r="4" stroke-width="2" />
+            </svg>
+            <span>Profile</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- Logout  -->
+      <div class="pt-4 mt-auto">
+        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-500 hover:text-red-500 transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <line x1="19" y1="12" x2="5" y2="12" stroke-width="2" stroke-linecap="round"/>
+            <polyline points="12 19 5 12 12 5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Logout</span>
+        </a>
+      </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col min-w-0 h-full overflow-y-auto lg:overflow-hidden p-4 sm:p-6 lg:p-8 space-y-6">
+      <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 shrink-0">
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900 ">Overview</h1>
+        </div>
+
+        <div class="text-left sm:text-center ml-90">
+          <p class="text-[11px] font-semibold text-[#34be82]">Akanmu Qodri</p>
+          <p class="text-lg font-bold text-slate-900 tracking-wider">1234567890</p>
+        </div>
+
+        <!-- Search & Profile area -->
+        <div class="flex items-center space-x-3">
+          <!-- Search Input  -->
+          <div class="relative flex items-center">
+            <!-- Search Icon -->
+            <svg class="w-4 h-4 absolute left-3 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8" stroke-width="2" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-width="2" stroke-linecap="round" />
+            </svg>
+            <input 
+              type="text" 
+              placeholder="Search" 
+              class="pl-9 pr-4 py-2 bg-white/80 border border-slate-200/80 rounded-full text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#34be82] w-40 sm:w-52"
+            />
+          </div>
+
+          <!-- Notification Bell Dropdown Button -->
+          <div class="relative">
+            <button 
+              id="notification-btn" 
+              class="p-2 rounded-full bg-white border border-slate-200/80 text-slate-600 hover:text-slate-900 transition-colors relative cursor-pointer"
+              aria-label="Notifications"
+            >
+              <!-- Bell svg -->
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.73 21a2 2 0 01-3.46 0" />
+              </svg>
+              <!-- Notificatio red alert -->
+              <span class="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-red-500 rounded-full"></span>
+            </button>
+
+            <!-- Notification -->
+            <div 
+              id="notification-dropdown" 
+              class="hidden absolute right-0 mt-2 w-72 sm:w-80 bg-[#F0F3F1] rounded-2xl p-4 shadow-xl border border-slate-200/70 z-50 space-y-3"
+            >
+              <div class="text-xs text-slate-700 space-y-3">
+                <div class="pb-2.5 border-b border-slate-200/80 flex items-center justify-between">
+                  <span>Analysis sent <strong class="text-[#34be82]">₦ 10,000</strong> to you</span>
+                </div>
+                <div class="pb-2.5 border-b border-slate-200/80 flex items-center justify-between">
+                  <span>You sent <strong class="text-red-500">₦ 10,000</strong> to Adeniyi</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span>You added <strong class="text-red-500">₦ 5,000</strong> to your Account</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- User  Image  -->
+           
+          <div class="w-9 h-9 rounded-full overflow-hidden border border-slate-200 bg-slate-200 shrink-0">
+            <a href="profile.html">
+            <img src="/src/Assets/images/WhatsApp Image 2026-09-24 at 3.09.05 PM.jpeg" alt="User Profile" class="w-full h-full object-cover" />
+            </a>
+          </div>
+        </div> 
+      </header>
+
+      <!-- Dashboard  -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 min-h-0">
+        <div class="lg:col-span-8 flex flex-col justify-start space-y-6 overflow-y-auto pr-1">
+          
+          <!-- Currenrt  Aza Balamce  -->
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <h2 class="text-sm font-bold text-slate-800">Current Account Balance</h2>
+              
+              <div class="flex items-center space-x-2">
+                <!-- Eye Toggle / Hide Balance Button -->
+                <button id="toggle-balance-btn" class="p-1.5 bg-[#EFEFEF] text-slate-700 hover:text-slate-700  hover:bg-slate-200 rounded-md">
+                  <!-- Eye Off Icon -->
+                  <svg id="eye-off-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908A8.962 8.962 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21M3 3l18 18" />
+                  </svg>
+                  <!-- Eye Open Icon -->
+                  <svg id="eye-icon" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                </button>
+
+                <!-- Date -->
+                <div class="relative">
+                  <button 
+                    id="date-dropdown-btn" 
+                    class="flex items-center space-x-2 bg-[#EFEFEF] px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-200 transition-colors"
+                  >
+                    <!-- Calendar Icon -->
+                    <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke-width="2"/>
+                      <line x1="16" y1="2" x2="16" y2="6" stroke-width="2"/>
+                      <line x1="8" y1="2" x2="8" y2="6" stroke-width="2"/>
+                      <line x1="3" y1="10" x2="21" y2="10" stroke-width="2"/>
+                    </svg>
+
+                    <span id="selected-date-text">Feb 22 - Mar 21, 2023</span>
+
+                    <!-- Chevron Down Icon -->
+                    <svg id="date-chevron" class="w-3.5 h-3.5 text-slate-500 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+
+                  <!-- Date dropdown -->
+                  <div 
+                    id="date-dropdown-menu" 
+                    class="hidden absolute right-0 mt-1 w-56 bg-[#EFEFEF] rounded-2xl p-1.5 shadow-lg border border-slate-200/80 z-40 space-y-1 text-xs font-semibold text-slate-700"
+                  >
+                    <button class="date-option w-full text-left px-3 py-2 rounded-xl hover:bg-white transition-colors">Feb 22 - Mar 21, 2023</button>
+                    <button class="date-option w-full text-left px-3 py-2 rounded-xl hover:bg-white transition-colors">Jan 22 - Feb 21, 2023</button>
+                    <button class="date-option w-full text-left px-3 py-2 rounded-xl hover:bg-white transition-colors">Dec 22 - Jan 21, 2023</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Balance Banner Card -->
+            <div class="bg-[#D8F3E5] rounded-2xl p-4 sm:p-5 flex items-center space-x-4 sm:space-x-8">
+
+              <!-- lg -->
+              <div class="w-12 h-12 rounded-xl flex items-center justify-center text-sm ">
+                <img src="Assets/images/favicon.png" alt="RB Logo" class="w-8 h-8 object-contain" />
+              </div>
+
+              <div class="grid grid-cols-3 gap-2 sm:gap-6 flex-1 text-left">
+                <div>
+                  <p class="text-[10px] font-semibold text-[#46237A] ">Current Balance</p>
+                  <p class="text-sm sm:text-base font-bold text-slate-900 balance-text">₦ 44,500.00</p>
+                </div>
+                <div>
+                  <p class="text-[10px] font-semibold text-[#46237A] ">Income</p>
+                  <p class="text-sm sm:text-base font-bold text-slate-900 balance-text">₦ 54,500.00</p>
+                </div>
+                <div>
+                  <p class="text-[10px] font-semibold text-[#46237A] ">Expense</p>
+                  <p class="text-sm sm:text-base font-bold text-slate-900 balance-text">₦ 10,000.00</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accounts -->
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <h2 class="text-sm font-bold text-slate-800">Accounts</h2>
+              <button class="p-1.5 bg-[#EFEFEF] hover:bg-slate-200 text-slate-700 rounded-lg transition-colors" aria-label="Add Account">
+                
+                <!-- Plus svg -->
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <line x1="12" y1="5" x2="12" y2="19" stroke-width="2" stroke-linecap="round"/>
+                  <line x1="5" y1="12" x2="19" y2="12" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <!-- Account Card 1 -->
+              <div class="bg-[#D8F3E5] p-4 rounded-2xl space-y-1">
+                <p class="text-[10px] font-semibold text-[#46237A]">Main Account</p>
+                <p class="text-sm font-bold text-slate-900 balance-text">₦ 44,500.00</p>
+              </div>
+              <!-- Account Card 2 -->
+              <div class="bg-[#D8F3E5] p-4 rounded-2xl space-y-1">
+                <p class="text-[10px] font-semibold text-[#46237A]">School Savings</p>
+                <p class="text-sm font-bold text-slate-900 balance-text">₦ 44,500.00</p>
+              </div>
+              <!-- Account Card 3 -->
+              <div class="bg-[#D8F3E5] p-4 rounded-2xl space-y-1">
+                <p class="text-[10px] font-semibold text-[#46237A]">Holiday Plan</p>
+                <p class="text-sm font-bold text-slate-900 balance-text">₦ 44,500.00</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Statiscs -->
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <h2 class="text-sm font-bold text-slate-800">Statistics</h2>
+
+              <!-- Statistics dropdiwn -->
+              <div class="relative">
+                <button 
+                  id="stats-dropdown-btn" 
+                  class="flex items-center space-x-2 bg-[#EFEFEF] px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-200 transition-colors"
+                >
+                  <span id="selected-stats-text">This Month</span>
+                  <!--  Down Icon -->
+                  <svg id="stats-chevron" class="w-3.5 h-3.5 text-slate-500 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+
+                <!-- SStat Dropfown -->
+                <div 
+                  id="stats-dropdown-menu" 
+                  class="hidden absolute right-0 mt-1 w-36 bg-[#EFEFEF] rounded-2xl p-1.5 shadow-lg border border-slate-200/80 z-40 space-y-1 text-xs font-semibold text-slate-700"
+                >
+                  <button class="stats-option w-full text-left px-3 py-2 rounded-xl hover:bg-white transition-colors">This Month</button>
+                  <button class="stats-option w-full text-left px-3 py-2 rounded-xl hover:bg-white transition-colors">February</button>
+                  <button class="stats-option w-full text-left px-3 py-2 rounded-xl hover:bg-white transition-colors">January</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Stats Bar Items -->
+            <div class="space-y-3 pt-1">
+
+              <!-- Income Row -->
+              <div class="flex items-center justify-between gap-4">
+                <div class="flex items-center space-x-3 w-28">
+
+                  <!-- -->
+                  <div class="w-7 h-7 flex items-center justify-center ">
+                    <img src="Assets/images/logo green.png" alt="rb" class="w-6 h-6 object-contain" /> 
+                
+                  </div>
+                  <span class="text-xs font-semibold text-slate-700">Income</span>
+                </div>
+                <!-- Progress Bar -->
+                <div class="flex-1 bg-slate-200/50 h-2.5 rounded-full overflow-hidden">
+                  <div class="bg-[#34be82] h-full rounded-full" style="width: 75%;"></div>
+                </div>
+                <span class="text-xs font-bold text-slate-900 w-24 text-right">₦ 54,500.00</span>
+              </div>
+
+              <!-- Expense Row -->
+              <div class="flex items-center justify-between gap-4">
+                <div class="flex items-center space-x-3 w-28">
+
+                  <!-- -->
+                  <div class="w-7 h-7  flex items-center justify-center ">
+                     <img src="Assets/images/logo red.png" alt="rb" class="w-6 h-6 object-contain" /> 
+                  </div>
+                  <span class="text-xs font-semibold text-slate-700">Expense</span>
+                </div>
+                <!-- Progress Bar -->
+                <div class="flex-1 bg-slate-200/50 h-2.5 rounded-full overflow-hidden">
+                  <div class="bg-red-400 h-full rounded-full" style="width: 35%;"></div>
+                </div>
+                <span class="text-xs font-bold text-slate-900 w-24 text-right">₦ 10,000.00</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!--  Transactoin & pro  -->
+        <div id="transactions-panel" class="lg:col-span-4 flex flex-col space-y-4 border-t lg:border-t-0 pt-4 lg:pt-0">
+          
+          <!-- Transactions History  -->
+          <div class="space-y-3">
+            <div class="flex items-center justify-between py-1">
+              <h2 class="text-sm font-bold text-slate-800">Transactions</h2>
+              <a href="#" class="text-[#34be82] hover:text-[#2ca872] transition-colors">
+                <!-- Arrow Icon -->
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <line x1="5" y1="12" x2="19" y2="12" stroke-width="2" stroke-linecap="round"/>
+                  <polyline points="12 5 19 12 12 19" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+
+            <!-- Transaction  Scrollable Box -->
+            <div class="space-y-2 text-xs max-h-65 overflow-y-auto pr-1">
+              <div class="flex items-center justify-between py-1.5 border-b border-slate-200/40">
+                <div>
+                  <p class="font-semibold text-slate-700">Akanmu Qodri</p>
+                  <p class="text-[10px] text-slate-400">24.Sep.2026 - 9:39</p>
+                </div>
+                <span class="font-bold text-red-500">- 10,000.00</span>
+              </div>
+
+              <div class="flex items-center justify-between py-1.5 border-b border-slate-200/40">
+                <div>
+                  <p class="font-semibold text-slate-700">Akanmu Qodri</p>
+                  <p class="text-[10px] text-slate-400">24.Sep.2026  09:39</p>
+                </div>
+                <span class="font-bold text-[#34be82]">+10,000.00</span>
+              </div>
+
+              <div class="flex items-center justify-between py-1.5 border-b border-slate-200/40">
+                <div>
+                  <p class="font-semibold text-slate-700">Akanmu Qodri</p>
+                  <p class="text-[10px] text-slate-400">24.Sep.2023 - 09:39</p>
+                </div>
+                <span class="font-bold text-red-500">- 10,000.00</span>
+              </div>
+
+              <div class="flex items-center justify-between py-1.5 border-b border-slate-200/40">
+                <div>
+                  <p class="font-semibold text-slate-700">Akanmu Qodri</p>
+                  <p class="text-[10px] text-slate-400">24.Sep.2026 - 09:59</p>
+                </div>
+                <span class="font-bold text-[#34be82]">+10,000.00</span>
+              </div>
+
+              <div class="flex items-center justify-between py-1.5 border-b border-slate-200/40">
+                <div>
+                  <p class="font-semibold text-slate-700">Akanmu Qodri</p>
+                  <p class="text-[10px] text-slate-400">24.Sep.2026 - 09:39</p>
+                </div>
+                <span class="font-bold text-red-500">- 10,000.00</span>
+              </div>
+
+              
+
+              
+
+            
+            </div>
+          </div>
+
+          <!-- pro -->
+          <div 
+
+          class="rounded-2xl p-4 text-white relative overflow-hidden  shadow-md"
+          style="background-image: url('Assets/images/Rectangle%20167.png'); background-size: cover; background-position: center;">
+            <div class="mb-6">
+              <a href="#" class="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-colors">
+                <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <line x1="7" y1="17" x2="17" y2="7" stroke-width="2" stroke-linecap="round"/>
+                  <polyline points="7 7 17 7 17 17" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+            <h3 class="text-base font-bold tracking-wide">Upgrade to PRO</h3>
+            <p class="text-[11px] text-emerald-100 mt-0.5">Sign in on more than one device</p>
+          </div>
+        </div>
+    </main>
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>

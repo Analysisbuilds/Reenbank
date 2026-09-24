@@ -38,6 +38,7 @@ if (faqNavBtns.length > 0 && activeTitle && activeAnswer) {
   }
 });
 
+
 document.addEventListener('DOMContentLoaded', () => {
     const registerCard = document.getElementById('register-card');
     const verifyCard = document.getElementById('verify-card');
@@ -124,4 +125,10 @@ togglePasswordBtn.addEventListener('click', () => {
   // Toggle icon visibility
   eyeIcon.classList.toggle('hidden', isPassword);
   eyeOffIcon.classList.toggle('hidden', !isPassword);
+});
+
+document.getElementById('signup-form').addEventListener('submit', function(event) {
+  event.preventDefault();
+  const email = this.querySelector('input[type="email"]').value;
+  window.location.href = `register.html?email=${encodeURIComponent(email)}`;
 });
