@@ -17,7 +17,7 @@
              <img src="Assets/images/logo.png" alt="Reen Bank Logo" class="w-30 h-10 object-contain ml-4 mt-4" /> 
           </div>
 
-          <!-- Mobile-only: notification + profile -->
+          <!-- Mobile-only: notification + profile, opposite the logo -->
           <div class="flex lg:hidden items-center space-x-3">
             <div class="relative">
               <button 
@@ -95,7 +95,7 @@
       </div>
 
       <!-- Logout  -->
-      <div class="pt-4 mt-auto">
+      <div class="hidden lg:block pt-4 mt-auto">
         <button 
         type="button" 
         onclick="document.getElementById('logout-modal').classList.remove('hidden');"
@@ -143,11 +143,32 @@
 
     <main class="flex-1 flex flex-col min-w-0 h-full overflow-y-auto lg:overflow-hidden p-4 sm:p-6 lg:p-8 space-y-6">
       <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 shrink-0">
-        <div>
-          <h1 class="text-2xl font-bold text-slate-900 ">Overview</h1>
+        <div class="flex items-center justify-between lg:block">
+          <div>
+            <h1 class="text-2xl font-bold text-slate-900 ">Overview</h1>
+            <!-- Mobile-only: account holder name & number under Overview -->
+            <div class="mt-1 lg:hidden">
+              <p class="text-[11px] font-semibold text-[#34be82]">Akanmu Qodri</p>
+              <p class="text-sm font-bold text-slate-900 tracking-wider">1234567890</p>
+            </div>
+          </div>
+
+          <!-- Mobile-only: logout, opposite Overview -->
+          <button 
+            type="button" 
+            onclick="document.getElementById('logout-modal').classList.remove('hidden');"
+            class="lg:hidden flex items-center space-x-2 px-3 py-2 rounded-xl text-xs font-medium text-slate-500 hover:text-red-500 transition-colors cursor-pointer"
+            aria-label="Logout"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <line x1="19" y1="12" x2="5" y2="12" stroke-width="2" stroke-linecap="round"/>
+              <polyline points="12 19 5 12 12 5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Logout</span>
+          </button>
         </div>
 
-        <div class="text-left sm:text-center ml-90">
+        <div class="hidden lg:block text-left sm:text-center ml-90">
           <p class="text-[11px] font-semibold text-[#34be82]">Akanmu Qodri</p>
           <p class="text-lg font-bold text-slate-900 tracking-wider">1234567890</p>
         </div>
@@ -155,8 +176,8 @@
         <!-- Search & Profile area -->
         <div class="flex items-center space-x-3">
 
-          <!-- Search space  -->
-          <div class="relative flex items-center">
+          <!-- Search space (desktop only; mobile search lives in the Transactions panel) -->
+          <div class="hidden lg:flex relative items-center">
             <!-- Search svg -->
             <svg class="w-4 h-4 absolute left-3 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <circle cx="11" cy="11" r="8" stroke-width="2" />
@@ -404,6 +425,19 @@
 
         <!--  Transactoin & Upagrade pro  -->
         <div id="transactions-panel" class="hidden lg:flex lg:col-span-4 flex-col space-y-4 border-t lg:border-t-0 pt-4 lg:pt-0">
+
+          <!-- Mobile-only: search, shown only when Transactions is opened -->
+          <div class="lg:hidden relative flex items-center">
+            <svg class="w-4 h-4 absolute left-3 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8" stroke-width="2" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-width="2" stroke-linecap="round" />
+            </svg>
+            <input 
+              type="text" 
+              placeholder="Search" 
+              class="w-full pl-9 pr-4 py-2 bg-white/80 border border-slate-200/80 rounded-full text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#34be82]"
+            />
+          </div>
           
           <!-- Transactions History  -->
           <div class="space-y-3">
