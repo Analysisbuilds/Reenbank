@@ -1929,6 +1929,9 @@
     .lg\:hidden {
       display: none;
     }
+    .lg\:min-h-0 {
+      min-height: 0px;
+    }
     .lg\:w-1\/2 {
       width: calc(1 / 2 * 100%);
     }
@@ -1937,6 +1940,9 @@
     }
     .lg\:max-w-xl {
       max-width: var(--container-xl);
+    }
+    .lg\:flex-1 {
+      flex: 1;
     }
     .lg\:grid-cols-12 {
       grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -1968,6 +1974,9 @@
     }
     .lg\:overflow-hidden {
       overflow: hidden;
+    }
+    .lg\:overflow-y-auto {
+      overflow-y: auto;
     }
     .lg\:border-t-0 {
       border-top-style: var(--tw-border-style);

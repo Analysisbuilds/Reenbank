@@ -113,7 +113,6 @@ if (toggleBalanceBtn) {
     });
 }
 
-
   // Mobile trnx panel
   const navTransactionsBtn = document.getElementById('nav-transactions');
   const transactionsPanel = document.getElementById('transactions-panel');
@@ -122,7 +121,7 @@ if (toggleBalanceBtn) {
     navTransactionsBtn.addEventListener('click', (e) => {
       e.preventDefault();
       
-      // On mobile viewports, toggle visibility of transaction side section
+      // On mobile, toggle eys of transaction 
       if (window.innerWidth < 1024) {
         transactionsPanel.classList.toggle('hidden');
         transactionsPanel.scrollIntoView({ behavior: 'smooth' });
@@ -130,7 +129,7 @@ if (toggleBalanceBtn) {
     });
   }
 
-  // click outside to close open drop down
+  // outside 2 close open dropdown
   document.addEventListener('click', () => {
     closeOtherDropdowns(null);
   });
