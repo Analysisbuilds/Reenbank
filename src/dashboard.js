@@ -16,6 +16,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // notifications (mobile top-bar version)
+  const notificationBtnMobile = document.getElementById('notification-btn-mobile');
+  const notificationDropdownMobile = document.getElementById('notification-dropdown-mobile');
+
+  if (notificationBtnMobile && notificationDropdownMobile) {
+    notificationBtnMobile.addEventListener('click', (e) => {
+      e.stopPropagation();
+      notificationDropdownMobile.classList.toggle('hidden');
+      closeOtherDropdowns(notificationDropdownMobile);
+    });
+  }
+
   // date dropdown
   const dateBtn = document.getElementById('date-dropdown-btn');
   const dateMenu = document.getElementById('date-dropdown-menu');
@@ -126,6 +138,7 @@ if (toggleBalanceBtn) {
   function closeOtherDropdowns(currentDropdown) {
     const allDropdowns = [
       { element: notificationDropdown, chevron: null },
+      { element: notificationDropdownMobile, chevron: null },
       { element: dateMenu, chevron: dateChevron },
       { element: statsMenu, chevron: statsChevron }
     ];

@@ -517,6 +517,9 @@
   .h-14 {
     height: calc(var(--spacing) * 14);
   }
+  .h-15 {
+    height: calc(var(--spacing) * 15);
+  }
   .h-32 {
     height: calc(var(--spacing) * 32);
   }
@@ -639,6 +642,9 @@
   }
   .w-56 {
     width: calc(var(--spacing) * 56);
+  }
+  .w-64 {
+    width: calc(var(--spacing) * 64);
   }
   .w-72 {
     width: calc(var(--spacing) * 72);
@@ -1911,8 +1917,14 @@
     .lg\:mb-16 {
       margin-bottom: calc(var(--spacing) * 16);
     }
+    .lg\:block {
+      display: block;
+    }
     .lg\:flex {
       display: flex;
+    }
+    .lg\:hidden {
+      display: none;
     }
     .lg\:w-1\/2 {
       width: calc(1 / 2 * 100%);
@@ -1929,11 +1941,24 @@
     .lg\:flex-row {
       flex-direction: row;
     }
+    .lg\:justify-start {
+      justify-content: flex-start;
+    }
     .lg\:gap-20 {
       gap: calc(var(--spacing) * 20);
     }
     .lg\:gap-28 {
       gap: calc(var(--spacing) * 28);
+    }
+    :where(.lg\:space-y-1 > :not(:last-child)) {
+      --tw-space-y-reverse: 0;
+      margin-block-start: calc(var(--spacing) * var(--tw-space-y-reverse));
+      margin-block-end: calc(var(--spacing) * calc(1 - var(--tw-space-y-reverse)));
+    }
+    :where(.lg\:space-x-3 > :not(:last-child)) {
+      --tw-space-x-reverse: 0;
+      margin-inline-start: calc(calc(var(--spacing) * 3) * var(--tw-space-x-reverse));
+      margin-inline-end: calc(calc(var(--spacing) * 3) * calc(1 - var(--tw-space-x-reverse)));
     }
     .lg\:gap-y-16 {
       row-gap: calc(var(--spacing) * 16);

@@ -12,12 +12,50 @@
   <div class="flex h-full w-full flex-col lg:flex-row">
     <aside class="w-full lg:w-64 bg-[#F6FAF7] p-5 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-slate-200/60 shrink-0">
       <div>
-        <div class="flex items-center space-x-3 mb-8">
+        <div class="flex items-center justify-between lg:justify-start lg:space-x-3 mb-8">
           <div class="">
              <img src="Assets/images/logo.png" alt="Reen Bank Logo" class="w-30 h-10 object-contain ml-4 mt-4" /> 
           </div>
+
+          <!-- Mobile-only: notification + profile, opposite the logo -->
+          <div class="flex lg:hidden items-center space-x-3">
+            <div class="relative">
+              <button 
+                id="notification-btn-mobile" 
+                class="p-2 rounded-full bg-white border border-slate-200/80 text-slate-600 hover:text-slate-900 transition-colors relative cursor-pointer"
+                aria-label="Notifications"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.73 21a2 2 0 01-3.46 0" />
+                </svg>
+                <span class="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-red-500 rounded-full"></span>
+              </button>
+
+              <div 
+                id="notification-dropdown-mobile" 
+                class="hidden absolute right-0 mt-2 w-64 bg-[#F0F3F1] rounded-2xl p-4 shadow-xl border border-slate-200/70 z-50 space-y-3"
+              >
+                <div class="text-xs text-slate-700 space-y-3">
+                  <div class="pb-2.5 border-b border-slate-200/80 flex items-center justify-between">
+                    <span>Analysis sent <strong class="text-[#34be82]">₦ 10,000</strong> to you</span>
+                  </div>
+                  <div class="pb-2.5 border-b border-slate-200/80 flex items-center justify-between">
+                    <span>You sent <strong class="text-red-500">₦ 10,000</strong> to Adeniyi</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span>You added <strong class="text-red-500">₦ 5,000</strong> to your Account</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <a href="profile.html" class="w-9 h-9 rounded-full overflow-hidden border border-slate-200 bg-slate-200 shrink-0 block">
+              <img src="/src/Assets/images/WhatsApp Image 2026-09-24 at 3.09.05 PM.jpeg" alt="User Profile" class="w-full h-full object-cover" />
+            </a>
+          </div>
         </div>
-        <nav class="space-y-1">
+        <nav class="grid grid-cols-2 gap-2 lg:block lg:space-y-1">
           <a href="#" id="nav-overview" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold text-[#34be82] bg-emerald-50/80 transition-all">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <rect x="3" y="3" width="7" height="7" rx="1.5" stroke-width="2"/>
@@ -132,7 +170,7 @@
           </div>
 
           <!-- Notification Bell Click to Dropdown  Button -->
-          <div class="relative">
+          <div class="hidden lg:block relative">
             <button 
               id="notification-btn" 
               class="p-2 rounded-full bg-white border border-slate-200/80 text-slate-600 hover:text-slate-900 transition-colors relative cursor-pointer"
@@ -168,7 +206,7 @@
 
           <!-- profile Image  -->
            
-          <div class="w-9 h-9 rounded-full overflow-hidden border border-slate-200 bg-slate-200 shrink-0">
+          <div class="hidden lg:block w-9 h-9 rounded-full overflow-hidden border border-slate-200 bg-slate-200 shrink-0">
             <a href="profile.html">
             <img src="/src/Assets/images/WhatsApp Image 2026-09-24 at 3.09.05 PM.jpeg" alt="User Profile" class="w-full h-full object-cover" />
             </a>
@@ -365,7 +403,7 @@
         </div>
 
         <!--  Transactoin & Upagrade pro  -->
-        <div id="transactions-panel" class="lg:col-span-4 flex flex-col space-y-4 border-t lg:border-t-0 pt-4 lg:pt-0">
+        <div id="transactions-panel" class="hidden lg:flex lg:col-span-4 flex-col space-y-4 border-t lg:border-t-0 pt-4 lg:pt-0">
           
           <!-- Transactions History  -->
           <div class="space-y-3">
