@@ -158,19 +158,37 @@ if (toggleBalanceBtn) {
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  const accountBalances = {
+  // local storage 
+  const DEFAULT_ACCOUNTS = {
     'Main Account': 44500,
     'School Savings': 44500,
     'Holiday Plan': 44500
   };
 
+  const DEFAULT_TRANSACTIONS = [
+    { name: 'Akanmu Qodri', type: 'Bank Transfer', date: '06 Mar 2023 - 09:30', amount: -10000, status: 'Pending', statusBg: 'bg-gray-300 text-gray-700' },
+    { name: 'Adeniyi Qodri', type: 'Direct Pay', date: '06 Mar 2023 - 09:30', amount: 10000, status: 'Completed', statusBg: 'bg-emerald-500 text-white' },
+    { name: 'Akanmu Adeniyi', type: 'Bank Transfer', date: '06 Mar 2023 - 09:28', amount: -10000, status: 'Canceled', statusBg: 'bg-rose-500 text-white' }
+  ];
+
+  let accountBalances = JSON.parse(localStorage.getItem('reen_accounts')) || DEFAULT_ACCOUNTS;
+  let transactions = JSON.parse(localStorage.getItem('reen_transactions')) || DEFAULT_TRANSACTIONS;
+  let customAccountAdded = localStorage.getItem('reen_custom_account_added') === 'true';
+
   let selectedAccountForAction = 'Main Account';
 
-  // Eye SVG icons
+  // SVG Icons
   const eyeOpenSvg = `<svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>`;
   const eyeClosedSvg = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-7 0-10-7-10-7a17.88 17.88 0 013.586-4.586m3.172-2.172A9.97 9.97 0 0112 5c7 0 10 7 10 7a17.86 17.86 0 01-2.43 3.32M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" /></svg>`;
 
-  // 1. Notification Overlay Toggle
+  // Helper: Sync data to localStorage
+  const saveData = () => {
+    localStorage.setItem('reen_accounts', JSON.stringify(accountBalances));
+    localStorage.setItem('reen_transactions', JSON.stringify(transactions));
+    localStorage.setItem('reen_custom_account_added', customAccountAdded ? 'true' : 'false');
+  };
+
+  // --- 2. NOTIFICATION DROPDOWN FIX ---
   const notifBtn = document.getElementById('notification-btn');
   const notifDropdown = document.getElementById('notification-dropdown');
   const notifBadge = document.getElementById('notif-badge');
@@ -178,8 +196,13 @@ document.addEventListener('DOMContentLoaded', () => {
   if (notifBtn && notifDropdown) {
     notifBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      notifDropdown.classList.toggle('hidden');
-      if (notifBadge) notifBadge.classList.add('hidden');
+      const isHidden = notifDropdown.classList.contains('hidden');
+      if (isHidden) {
+        notifDropdown.classList.remove('hidden');
+        if (notifBadge) notifBadge.classList.add('hidden');
+      } else {
+        notifDropdown.classList.add('hidden');
+      }
     });
 
     document.addEventListener('click', (e) => {
@@ -189,16 +212,44 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 2. Setup Account Box Handlers (Strictly visual active border, NO transaction manipulation)
+  // --- 3. RENDERING TRANSACTIONS FROM STORAGE ---
+  const renderTransactions = () => {
+    const listContainer = document.getElementById('transactions-list');
+    if (!listContainer) return;
+
+    listContainer.innerHTML = '';
+    transactions.forEach((tx) => {
+      const isPositive = tx.amount > 0;
+      const sign = isPositive ? '+' : '-';
+      const colorClass = isPositive ? 'text-emerald-500' : 'text-rose-500';
+      const symbolBg = isPositive ? 'bg-emerald-500' : 'bg-rose-500';
+
+      const row = document.createElement('div');
+      row.className = 'flex items-center justify-between py-2 border-b border-gray-100 text-xs';
+      row.innerHTML = `
+        <div class="flex items-center gap-3">
+          <div class="w-7 h-7 rounded-full ${symbolBg} text-white flex items-center justify-center font-bold">${sign}</div>
+          <div>
+            <p class="font-bold text-gray-800">${tx.name}</p>
+            <p class="text-gray-400 text-[10px]">${tx.type}</p>
+          </div>
+        </div>
+        <div class="text-gray-400 text-[11px]">${tx.date}</div>
+        <div class="font-bold ${colorClass}">${sign}${Math.abs(tx.amount).toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
+        <div><span class="px-3 py-1 rounded-md text-[10px] font-semibold ${tx.statusBg}">${tx.status}</span></div>
+      `;
+      listContainer.appendChild(row);
+    });
+  };
+
+  // --- 4. ACCOUNT CARD ATTACHMENT ---
   const setupCardEvents = (card) => {
     card.addEventListener('click', () => {
       document.querySelectorAll('.account-card').forEach((c) => c.classList.remove('active-account-border'));
       card.classList.add('active-account-border');
       selectedAccountForAction = card.dataset.account;
-      // Transactions list remains completely untouched here.
     });
 
-    // Toggle Eye Balance Visibility
     const eyeBtn = card.querySelector('.toggle-eye-btn');
     const balanceText = card.querySelector('.account-balance');
     const accountName = card.dataset.account;
@@ -219,7 +270,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // Modal Triggers
     card.querySelector('.fund-btn')?.addEventListener('click', (e) => {
       e.stopPropagation();
       selectedAccountForAction = card.dataset.account;
@@ -233,14 +283,49 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  document.querySelectorAll('.account-card').forEach(setupCardEvents);
+  // --- 5. INITIAL RENDERING OF ACCOUNTS ---
+  const renderAccounts = () => {
+    const grid = document.getElementById('accounts-grid');
+    const addCard = document.getElementById('add-account-card');
+    if (!grid) return;
 
-  // Modal Close Buttons
+    // Remove old dynamic cards
+    grid.querySelectorAll('.account-card').forEach((card) => card.remove());
+
+    Object.keys(accountBalances).forEach((name, idx) => {
+      const card = document.createElement('div');
+      const isActive = idx === 0 ? 'active-account-border' : '';
+      card.className = `account-card ${isActive} bg-[#d8f3e5] p-5 rounded-2xl relative transition cursor-pointer shadow-sm`;
+      card.dataset.account = name;
+      card.innerHTML = `
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-semibold text-emerald-800">${name}</span>
+          <button class="toggle-eye-btn p-1 text-gray-600 hover:text-gray-900 transition" aria-label="Toggle Balance Visibility">
+            ${eyeClosedSvg}
+          </button>
+        </div>
+        <p class="account-balance text-xl font-bold text-gray-900 mb-5">*****</p>
+        <div class="flex items-center gap-2">
+          <button class="fund-btn bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-medium px-4 py-2 rounded-lg transition flex-1">Fund</button>
+          <button class="withdraw-btn bg-gray-300 hover:bg-gray-400 text-gray-800 text-xs font-medium px-4 py-2 rounded-lg transition flex-1">Withdraw</button>
+        </div>
+      `;
+      setupCardEvents(card);
+      grid.insertBefore(card, addCard);
+    });
+
+    // Hide Add Account card if one has already been created
+    if (customAccountAdded && addCard) {
+      addCard.classList.add('hidden');
+    }
+  };
+
+  // --- 6. MODAL ACTIONS ---
   document.getElementById('close-fund-modal')?.addEventListener('click', () => document.getElementById('fund-modal').classList.add('hidden'));
   document.getElementById('close-withdraw-modal')?.addEventListener('click', () => document.getElementById('withdraw-modal').classList.add('hidden'));
   document.getElementById('close-add-modal')?.addEventListener('click', () => document.getElementById('add-account-modal').classList.add('hidden'));
 
-  // 3. Fund Action -> Add Record ONLY on Fund
+  // Submit Fund
   document.getElementById('submit-fund-btn')?.addEventListener('click', () => {
     const input = document.getElementById('fund-amount-input');
     const amount = parseFloat(input?.value);
@@ -249,29 +334,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     accountBalances[selectedAccountForAction] = (accountBalances[selectedAccountForAction] || 0) + amount;
 
-    // Append single new transaction element
-    const transactionsList = document.getElementById('transactions-list');
-    const newRow = document.createElement('div');
-    newRow.className = 'flex items-center justify-between py-2 border-b border-gray-100 text-xs';
-    newRow.innerHTML = `
-      <div class="flex items-center gap-3">
-        <div class="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold">+</div>
-        <div>
-          <p class="font-bold text-gray-800">Maureen Oguche</p>
-          <p class="text-gray-400 text-[10px]">Direct Pay</p>
-        </div>
-      </div>
-      <div class="text-gray-400 text-[11px]">Just Now</div>
-      <div class="font-bold text-emerald-500">+${amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
-      <div><span class="px-3 py-1 rounded-md text-[10px] font-semibold bg-emerald-500 text-white">Completed</span></div>
-    `;
+    transactions.unshift({
+      name: 'Akanmu Qodri',
+      type: 'Direct Pay',
+      date: 'Just Now',
+      amount: amount,
+      status: 'Completed',
+      statusBg: 'bg-emerald-500 text-white'
+    });
 
-    transactionsList.prepend(newRow);
+    saveData();
+    renderTransactions();
     document.getElementById('fund-modal').classList.add('hidden');
     if (input) input.value = '';
   });
 
-  // 4. Withdraw Action -> Add Record ONLY on Withdraw
+  // Submit Withdraw
   document.getElementById('submit-withdraw-btn')?.addEventListener('click', () => {
     const input = document.getElementById('withdraw-amount-input');
     const amount = parseFloat(input?.value);
@@ -280,30 +358,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     accountBalances[selectedAccountForAction] = (accountBalances[selectedAccountForAction] || 0) - amount;
 
-    const transactionsList = document.getElementById('transactions-list');
-    const newRow = document.createElement('div');
-    newRow.className = 'flex items-center justify-between py-2 border-b border-gray-100 text-xs';
-    newRow.innerHTML = `
-      <div class="flex items-center gap-3">
-        <div class="w-7 h-7 rounded-full bg-rose-500 text-white flex items-center justify-center font-bold">-</div>
-        <div>
-          <p class="font-bold text-gray-800">Maureen Oguche</p>
-          <p class="text-gray-400 text-[10px]">Bank Transfer</p>
-        </div>
-      </div>
-      <div class="text-gray-400 text-[11px]">Just Now</div>
-      <div class="font-bold text-rose-500">-${amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
-      <div><span class="px-3 py-1 rounded-md text-[10px] font-semibold bg-emerald-500 text-white">Completed</span></div>
-    `;
+    transactions.unshift({
+      name: 'Akanmu Qodri',
+      type: 'Bank Transfer',
+      date: 'Just Now',
+      amount: -amount,
+      status: 'Completed',
+      statusBg: 'bg-emerald-500 text-white'
+    });
 
-    transactionsList.prepend(newRow);
+    saveData();
+    renderTransactions();
     document.getElementById('withdraw-modal').classList.add('hidden');
     if (input) input.value = '';
   });
 
-  // 5. Add Account -> Does NOT affect or touch transactions list
+  // Submit Add Account
   const addAccountCard = document.getElementById('add-account-card');
-
   addAccountCard?.addEventListener('click', () => {
     document.getElementById('add-account-modal').classList.remove('hidden');
   });
@@ -315,28 +386,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!accountName) return alert('Please enter an account name');
 
     accountBalances[accountName] = 0;
+    customAccountAdded = true;
 
-    const newCard = document.createElement('div');
-    newCard.className = 'account-card bg-[#d8f3e5] p-5 rounded-2xl relative transition cursor-pointer shadow-sm';
-    newCard.dataset.account = accountName;
-    newCard.innerHTML = `
-      <div class="flex items-center justify-between mb-3">
-        <span class="text-xs font-semibold text-emerald-800">${accountName}</span>
-        <button class="toggle-eye-btn p-1 text-gray-600 hover:text-gray-900 transition" aria-label="Toggle Balance Visibility">
-          ${eyeClosedSvg}
-        </button>
-      </div>
-      <p class="account-balance text-xl font-bold text-gray-900 mb-5">*****</p>
-      <div class="flex items-center gap-2">
-        <button class="fund-btn bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-medium px-4 py-2 rounded-lg transition flex-1">Fund</button>
-        <button class="withdraw-btn bg-gray-300 hover:bg-gray-400 text-gray-800 text-xs font-medium px-4 py-2 rounded-lg transition flex-1">Withdraw</button>
-      </div>
-    `;
+    saveData();
+    renderAccounts();
 
-    setupCardEvents(newCard);
-    addAccountCard.before(newCard);
     document.getElementById('add-account-modal').classList.add('hidden');
     if (input) input.value = '';
   });
 
+  // Run initial renders on boot
+  renderAccounts();
+  renderTransactions();
 });
