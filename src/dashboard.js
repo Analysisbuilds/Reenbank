@@ -283,7 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  // --- 5. INITIAL RENDERING OF ACCOUNTS ---
+  //  Initial renering of account 
   const renderAccounts = () => {
     const grid = document.getElementById('accounts-grid');
     const addCard = document.getElementById('add-account-card');
@@ -399,3 +399,5 @@ document.addEventListener('DOMContentLoaded', () => {
   renderAccounts();
   renderTransactions();
 });
+
+
