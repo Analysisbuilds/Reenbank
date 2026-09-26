@@ -158,11 +158,8 @@ if (toggleBalanceBtn) {
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  // -----------------------------------------------------------------
-  // 1. Initial State & Data Store
-  // -----------------------------------------------------------------
   let activeCard = document.querySelector('.account-card');
-  let selectedAccountForAction = null;
+  let selectedAccountForAction = 'Main Account';
 
   const accountBalances = {
     'Main Account': 44500,
@@ -171,24 +168,34 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const initialTransactions = [
-    { type: 'Bank Transfer', method: 'Bank Transfer', date: '06 Mar 2023 - 09:30', amount: -10000, status: 'Pending' },
-    { type: 'Direct Pay', method: 'Direct Pay', date: '06 Mar 2023 - 09:30', amount: 10000, status: 'Completed' },
-    { type: 'Bank Transfer', method: 'Bank Transfer', date: '06 Mar 2023 - 09:28', amount: -10000, status: 'Canceled' },
-    { type: 'Credit Card', method: 'Credit Card', date: '06 Mar 2023 - 09:28', amount: 10000, status: 'Completed' },
-    { type: 'Bank Transfer', method: 'Bank Transfer', date: '06 Mar 2023 - 09:20', amount: -10000, status: 'Pending' },
-    { type: 'Direct Pay', method: 'Direct Pay', date: '06 Mar 2023 - 09:00', amount: 10000, status: 'Completed' }
+    { name: 'Olanrewaju Luqman', type: 'Bank Transfer', method: 'Bank Transfer', date: '06 Mar 2023 - 09:30', amount: -10000, status: 'Pending' },
+    { name: 'Olanrewaju Luqman', type: 'Direct Pay', method: 'Direct Pay', date: '06 Mar 2023 - 09:30', amount: 10000, status: 'Completed' },
+    { name: 'Olanrewaju Luqman', type: 'Bank Transfer', method: 'Bank Transfer', date: '06 Mar 2023 - 09:28', amount: -10000, status: 'Canceled' },
+    { name: 'Olanrewaju Luqman', type: 'Credit Card', method: 'Credit Card', date: '06 Mar 2023 - 09:28', amount: 10000, status: 'Completed' },
+    { name: 'Olanrewaju Luqman', type: 'Bank Transfer', method: 'Bank Transfer', date: '06 Mar 2023 - 09:20', amount: -10000, status: 'Pending' },
+    { name: 'Olanrewaju Luqman', type: 'Direct Pay', method: 'Direct Pay', date: '06 Mar 2023 - 09:00', amount: 10000, status: 'Completed' }
   ];
 
-  // -----------------------------------------------------------------
-  // 2. Notification Toggle
-  // -----------------------------------------------------------------
+  // SVG Icon Templates
+  const eyeOpenSvg = `<svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>`;
+  const eyeClosedSvg = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-7 0-10-7-10-7a17.88 17.88 0 013.586-4.586m3.172-2.172A9.97 9.97 0 0112 5c7 0 10 7 10 7a17.86 17.86 0 01-2.43 3.32M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" /></svg>`;
+
+  const statusIcons = {
+    Completed: `<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
+    Pending: `<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
+    Canceled: `<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`
+  };
+
+  // 1. Notification Dropdown Toggle & Badge Clear
   const notifBtn = document.getElementById('notification-btn');
   const notifDropdown = document.getElementById('notification-dropdown');
+  const notifBadge = document.getElementById('notif-badge');
 
   if (notifBtn && notifDropdown) {
     notifBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       notifDropdown.classList.toggle('hidden');
+      if (notifBadge) notifBadge.classList.add('hidden');
     });
 
     document.addEventListener('click', (e) => {
@@ -198,29 +205,41 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // -----------------------------------------------------------------
-  // 3. Transactions List Renderer
-  // -----------------------------------------------------------------
-  const renderTransactions = () => {
+  // 2. Transaction List Rendering & Filtering
+  const renderTransactions = (filterTerm = '') => {
     const container = document.getElementById('transactions-list');
     if (!container) return;
 
-    container.innerHTML = initialTransactions.map((t) => {
+    const filtered = initialTransactions.filter((t) => 
+      t.name.toLowerCase().includes(filterTerm.toLowerCase()) ||
+      t.method.toLowerCase().includes(filterTerm.toLowerCase()) ||
+      t.status.toLowerCase().includes(filterTerm.toLowerCase())
+    );
+
+    if (filtered.length === 0) {
+      container.innerHTML = `<p class="text-center text-xs text-gray-400 py-4">No matching transactions found.</p>`;
+      return;
+    }
+
+    container.innerHTML = filtered.map((t) => {
       const isPositive = t.amount > 0;
-      const statusColors = {
-        Completed: 'bg-emerald-500 text-white',
-        Pending: 'bg-gray-300 text-gray-700',
-        Canceled: 'bg-rose-500 text-white'
+      const statusConfig = {
+        Completed: { bg: 'bg-emerald-500 text-white' },
+        Pending: { bg: 'bg-gray-300 text-gray-700' },
+        Canceled: { bg: 'bg-rose-500 text-white' }
       };
+      const status = statusConfig[t.status] || statusConfig.Completed;
 
       return `
         <div class="flex items-center justify-between py-2 border-b border-gray-100 last:border-none text-xs">
           <div class="flex items-center gap-3">
             <div class="w-7 h-7 rounded-full ${isPositive ? 'bg-emerald-500' : 'bg-rose-500'} text-white flex items-center justify-center font-bold">
-              ${isPositive ? '+' : '-'}
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${isPositive ? 'M12 4v16m8-8H4' : 'M20 12H4'}" />
+              </svg>
             </div>
             <div>
-              <p class="font-bold text-gray-800">Olanrewaju Luqman</p>
+              <p class="font-bold text-gray-800">${t.name}</p>
               <p class="text-gray-400 text-[10px]">${t.method}</p>
             </div>
           </div>
@@ -229,7 +248,10 @@ document.addEventListener('DOMContentLoaded', () => {
             ${isPositive ? '+' : ''}${t.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
           </div>
           <div>
-            <span class="px-3 py-1 rounded-md text-[10px] font-semibold ${statusColors[t.status]}">${t.status}</span>
+            <span class="px-3 py-1 rounded-md text-[10px] font-semibold flex items-center gap-1.5 ${status.bg}">
+              ${statusIcons[t.status] || ''}
+              ${t.status}
+            </span>
           </div>
         </div>
       `;
@@ -238,23 +260,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
   renderTransactions();
 
-  // -----------------------------------------------------------------
-  // 4. Card Selection & Eye Toggle Event Delegation
-  // -----------------------------------------------------------------
-  const accountsGrid = document.getElementById('accounts-grid');
+  // 3. Search Filter Logic
+  const searchInput = document.getElementById('global-search-input');
+  searchInput?.addEventListener('input', (e) => {
+    renderTransactions(e.target.value);
+  });
 
+  // 4. Setup Account Cards (Eye Icon Toggle & Selection)
   const setupCardEvents = (card) => {
-    // Select Card & Show Purple Left Border
     card.addEventListener('click', (e) => {
       if (e.target.closest('.toggle-eye-btn') || e.target.closest('.fund-btn') || e.target.closest('.withdraw-btn')) {
-        return; // Avoid selecting card if buttons inside it are clicked
+        return;
       }
       document.querySelectorAll('.account-card').forEach((c) => c.classList.remove('active-account-border'));
       card.classList.add('active-account-border');
       activeCard = card;
+      selectedAccountForAction = card.dataset.account;
     });
 
-    // Eye Toggle functionality
     const eyeBtn = card.querySelector('.toggle-eye-btn');
     const balanceText = card.querySelector('.account-balance');
     const accountName = card.dataset.account;
@@ -267,15 +290,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isVisible) {
           const val = accountBalances[accountName] || 0;
           balanceText.textContent = `₦ ${val.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
-          eyeBtn.innerHTML = '<i class="fa-regular fa-eye text-xs"></i>';
+          eyeBtn.innerHTML = eyeOpenSvg;
         } else {
           balanceText.textContent = '*****';
-          eyeBtn.innerHTML = '<i class="fa-regular fa-eye-slash text-xs"></i>';
+          eyeBtn.innerHTML = eyeClosedSvg;
         }
       });
     }
 
-    // Fund Button
     const fundBtn = card.querySelector('.fund-btn');
     fundBtn?.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -283,7 +305,6 @@ document.addEventListener('DOMContentLoaded', () => {
       openModal('fund-modal');
     });
 
-    // Withdraw Button
     const withdrawBtn = card.querySelector('.withdraw-btn');
     withdrawBtn?.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -294,9 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('.account-card').forEach(setupCardEvents);
 
-  // -----------------------------------------------------------------
-  // 5. Payment Method Switch (Direct Pay vs Credit Card)
-  // -----------------------------------------------------------------
+  // 5. Payment Method Switching logic
   const directPayRadio = document.querySelector('input[value="Direct Pay"]');
   const creditCardRadio = document.querySelector('input[value="Credit Card"]');
   const creditCardFields = document.getElementById('credit-card-fields');
@@ -322,9 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
   directPayRadio?.addEventListener('change', updatePaymentMethodUI);
   creditCardRadio?.addEventListener('change', updatePaymentMethodUI);
 
-  // -----------------------------------------------------------------
-  // 6. Modal Helpers & Handlers
-  // -----------------------------------------------------------------
+  // 6. Modal Helpers
   const openModal = (id) => document.getElementById(id)?.classList.remove('hidden');
   const closeModal = (id) => document.getElementById(id)?.classList.add('hidden');
 
@@ -333,9 +350,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('close-add-modal')?.addEventListener('click', () => closeModal('add-account-modal'));
   document.getElementById('close-success-btn')?.addEventListener('click', () => closeModal('success-modal'));
 
-  // -----------------------------------------------------------------
-  // 7. Process Funding
-  // -----------------------------------------------------------------
+  // 7. Funding Submission
   document.getElementById('submit-fund-btn')?.addEventListener('click', () => {
     const input = document.getElementById('fund-amount-input');
     const amount = parseFloat(input?.value);
@@ -344,11 +359,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const paymentMethod = document.querySelector('input[name="payment_method"]:checked')?.value || 'Direct Pay';
 
-    // Update account store balance
     accountBalances[selectedAccountForAction] = (accountBalances[selectedAccountForAction] || 0) + amount;
 
-    // Add to transaction log
     initialTransactions.unshift({
+      name: 'Maureen Oguche',
       type: paymentMethod,
       method: paymentMethod,
       date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) + ' - ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
@@ -359,26 +373,22 @@ document.addEventListener('DOMContentLoaded', () => {
     renderTransactions();
     closeModal('fund-modal');
 
-    // Show Success Modal
-    document.getElementById('success-message-text').textContent = `₦ ${amount.toLocaleString()} has been added to your Wallet!`;
+    document.getElementById('success-message-text').textContent = `₦ ${amount.toLocaleString()} has been added to ${selectedAccountForAction}!`;
     openModal('success-modal');
     if (input) input.value = '';
   });
 
-  // -----------------------------------------------------------------
-  // 8. Process Withdrawal
-  // -----------------------------------------------------------------
+  // 8. Withdrawal Submission
   document.getElementById('submit-withdraw-btn')?.addEventListener('click', () => {
     const input = document.getElementById('withdraw-amount-input');
     const amount = parseFloat(input?.value);
 
     if (!amount || amount <= 0) return alert('Please enter a valid amount');
 
-    // Deduct balance
     accountBalances[selectedAccountForAction] = (accountBalances[selectedAccountForAction] || 0) - amount;
 
-    // Add transaction record
     initialTransactions.unshift({
+      name: 'Maureen Oguche',
       type: 'Bank Transfer',
       method: 'Bank Transfer',
       date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) + ' - ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
@@ -389,15 +399,12 @@ document.addEventListener('DOMContentLoaded', () => {
     renderTransactions();
     closeModal('withdraw-modal');
 
-    // Show Success Modal
     document.getElementById('success-message-text').textContent = `₦ ${amount.toLocaleString()} withdrawal was successful!`;
     openModal('success-modal');
     if (input) input.value = '';
   });
 
-  // -----------------------------------------------------------------
-  // 9. Process Add Account (Single-Use Only)
-  // -----------------------------------------------------------------
+  // 9. Add New Account
   const addAccountCard = document.getElementById('add-account-card');
 
   addAccountCard?.addEventListener('click', () => {
@@ -410,18 +417,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!accountName) return alert('Please enter an account name');
 
-    // Initialize balance
     accountBalances[accountName] = 0;
 
-    // Create Card Component dynamically
     const newCard = document.createElement('div');
     newCard.className = 'account-card bg-[#d8f3e5] p-5 rounded-2xl relative transition cursor-pointer shadow-sm';
     newCard.dataset.account = accountName;
     newCard.innerHTML = `
       <div class="flex items-center justify-between mb-3">
         <span class="text-xs font-semibold text-emerald-800">${accountName}</span>
-        <button class="toggle-eye-btn text-gray-600 hover:text-gray-900">
-          <i class="fa-regular fa-eye-slash text-xs"></i>
+        <button class="toggle-eye-btn p-1 text-gray-600 hover:text-gray-900 transition" aria-label="Toggle Balance Visibility">
+          ${eyeClosedSvg}
         </button>
       </div>
       <p class="account-balance text-xl font-bold text-gray-900 mb-5">*****</p>
@@ -431,15 +436,10 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     `;
 
-    // Bind event listeners to new account card
     setupCardEvents(newCard);
-
-    // Replace "Add Account" slot with new card
     addAccountCard.replaceWith(newCard);
-
     closeModal('add-account-modal');
 
-    // Show confirmation modal
     document.getElementById('success-message-text').textContent = `Account "${accountName}" created successfully!`;
     openModal('success-modal');
   });
