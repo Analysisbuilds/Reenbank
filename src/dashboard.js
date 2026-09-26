@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: 'Olanrewaju Luqman', type: 'Direct Pay', method: 'Direct Pay', date: '06 Mar 2023 - 09:00', amount: 10000, status: 'Completed' }
   ];
 
-  // SVG Icon Templates
+  // SVG Templates
   const eyeOpenSvg = `<svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>`;
   const eyeClosedSvg = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-7 0-10-7-10-7a17.88 17.88 0 013.586-4.586m3.172-2.172A9.97 9.97 0 0112 5c7 0 10 7 10 7a17.86 17.86 0 01-2.43 3.32M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" /></svg>`;
 
@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
     Canceled: `<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`
   };
 
-  // 1. Notification Dropdown Toggle & Badge Clear
+  // 1. Notification Dropdown Toggle
   const notifBtn = document.getElementById('notification-btn');
   const notifDropdown = document.getElementById('notification-dropdown');
   const notifBadge = document.getElementById('notif-badge');
@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 2. Transaction List Rendering & Filtering
+  // 2. Static Transaction List Rendering & Filtering
   const renderTransactions = (filterTerm = '') => {
     const container = document.getElementById('transactions-list');
     if (!container) return;
@@ -258,15 +258,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }).join('');
   };
 
+  // Initial render on page load
   renderTransactions();
 
-  // 3. Search Filter Logic
+  // 3. Search Filter Input
   const searchInput = document.getElementById('global-search-input');
   searchInput?.addEventListener('input', (e) => {
     renderTransactions(e.target.value);
   });
 
-  // 4. Setup Account Cards (Eye Icon Toggle & Selection)
+  // 4. Setup Account Cards (Focus selection without disturbing transactions list)
   const setupCardEvents = (card) => {
     card.addEventListener('click', (e) => {
       if (e.target.closest('.toggle-eye-btn') || e.target.closest('.fund-btn') || e.target.closest('.withdraw-btn')) {
@@ -276,6 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
       card.classList.add('active-account-border');
       activeCard = card;
       selectedAccountForAction = card.dataset.account;
+      // Note: Transactions list is intentionally kept completely static here.
     });
 
     const eyeBtn = card.querySelector('.toggle-eye-btn');
@@ -315,7 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('.account-card').forEach(setupCardEvents);
 
-  // 5. Payment Method Switching logic
+  // 5. Modal Switching logic
   const directPayRadio = document.querySelector('input[value="Direct Pay"]');
   const creditCardRadio = document.querySelector('input[value="Credit Card"]');
   const creditCardFields = document.getElementById('credit-card-fields');
@@ -341,7 +343,7 @@ document.addEventListener('DOMContentLoaded', () => {
   directPayRadio?.addEventListener('change', updatePaymentMethodUI);
   creditCardRadio?.addEventListener('change', updatePaymentMethodUI);
 
-  // 6. Modal Helpers
+  // Modal Controls
   const openModal = (id) => document.getElementById(id)?.classList.remove('hidden');
   const closeModal = (id) => document.getElementById(id)?.classList.add('hidden');
 
@@ -350,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('close-add-modal')?.addEventListener('click', () => closeModal('add-account-modal'));
   document.getElementById('close-success-btn')?.addEventListener('click', () => closeModal('success-modal'));
 
-  // 7. Funding Submission
+  // 6. Funding Action (Adds record to transactions)
   document.getElementById('submit-fund-btn')?.addEventListener('click', () => {
     const input = document.getElementById('fund-amount-input');
     const amount = parseFloat(input?.value);
@@ -361,6 +363,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     accountBalances[selectedAccountForAction] = (accountBalances[selectedAccountForAction] || 0) + amount;
 
+    // Append new funding transaction record
     initialTransactions.unshift({
       name: 'Maureen Oguche',
       type: paymentMethod,
@@ -378,7 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (input) input.value = '';
   });
 
-  // 8. Withdrawal Submission
+  // 7. Withdrawal Action (Adds record to transactions)
   document.getElementById('submit-withdraw-btn')?.addEventListener('click', () => {
     const input = document.getElementById('withdraw-amount-input');
     const amount = parseFloat(input?.value);
@@ -387,6 +390,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     accountBalances[selectedAccountForAction] = (accountBalances[selectedAccountForAction] || 0) - amount;
 
+    // Append new withdrawal transaction record
     initialTransactions.unshift({
       name: 'Maureen Oguche',
       type: 'Bank Transfer',
@@ -404,7 +408,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (input) input.value = '';
   });
 
-  // 9. Add New Account
+  // 8. Add New Account (Does NOT reset or affect transactions list)
   const addAccountCard = document.getElementById('add-account-card');
 
   addAccountCard?.addEventListener('click', () => {
