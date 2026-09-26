@@ -112,7 +112,7 @@
     <div 
       id="logout-modal" 
       onclick="if(event.target === this) this.classList.add('hidden');"
-      class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs hidden items-center justify-center p-4 z-50 flex"
+      class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs hidden items-center justify-center p-4 z-60 flex"
       >
       <div class="bg-white shadow-[0px_0px_40px_#34be82] rounded-3xl p-8 max-w-sm w-full ">
         
@@ -191,10 +191,10 @@
           </div>
 
           <!-- Notification Bell Click to Dropdown  Button -->
-          <div class="hidden lg:block relative z-50">
+          <div class="hidden lg:block relative">
             <button 
               id="notification-btn" 
-              class="p-2 rounded-full bg-white border border-slate-200/80 text-slate-600 hover:text-slate-900 transition-colors relative cursor-pointer"
+              class="p-2 rounded-full bg-white border border-slate-200/80 text-slate-600 hover:text-slate-900 transition-colors relative z-50 cursor-pointer"
               aria-label="Notifications"
             >
               <!-- Bell svg -->
