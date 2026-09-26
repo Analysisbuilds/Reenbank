@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('reen_custom_account_added', customAccountAdded ? 'true' : 'false');
   };
 
-  // --- 2. NOTIFICATION DROPDOWN FIX ---
+  // Notification dropdown proposed fix 
   const notifBtn = document.getElementById('notification-btn');
   const notifDropdown = document.getElementById('notification-dropdown');
   const notifBadge = document.getElementById('notif-badge');
@@ -212,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- 3. RENDERING TRANSACTIONS FROM STORAGE ---
+  // rendering trx histories frm storage 
   const renderTransactions = () => {
     const listContainer = document.getElementById('transactions-list');
     if (!listContainer) return;
@@ -242,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  // --- 4. ACCOUNT CARD ATTACHMENT ---
+  // Acount cards
   const setupCardEvents = (card) => {
     card.addEventListener('click', () => {
       document.querySelectorAll('.account-card').forEach((c) => c.classList.remove('active-account-border'));
@@ -320,7 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // --- 6. MODAL ACTIONS ---
+  // Modal action 
   document.getElementById('close-fund-modal')?.addEventListener('click', () => document.getElementById('fund-modal').classList.add('hidden'));
   document.getElementById('close-withdraw-modal')?.addEventListener('click', () => document.getElementById('withdraw-modal').classList.add('hidden'));
   document.getElementById('close-add-modal')?.addEventListener('click', () => document.getElementById('add-account-modal').classList.add('hidden'));
