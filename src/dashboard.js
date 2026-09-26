@@ -395,9 +395,68 @@ document.addEventListener('DOMContentLoaded', () => {
     if (input) input.value = '';
   });
 
-  // Run initial renders on boot
+  // Run previous on reload
   renderAccounts();
   renderTransactions();
 });
 
 
+//This following codes Fix the notifications panel bug
+// When deleting codes It worked but I don't know why and how.
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Notification Overlay
+  const notifBtn = document.getElementById('notification-btn');
+  const notifDropdown = document.getElementById('notification-dropdown');
+  const notifBadge = document.getElementById('notif-badge');
+  if (notifBtn && notifDropdown) {
+    notifBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      notifDropdown.classList.toggle('hidden');
+      if (notifBadge) notifBadge.classList.add('hidden');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!notifDropdown.contains(e.target) && !notifBtn.contains(e.target)) {
+        notifDropdown.classList.add('hidden');
+      }
+    });
+  }
+
+  // 2. Setup Account Box Handlers (Strictly visual active border, NO transaction manipulation)
+  const setupCardEvents = (card) => {
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.account-card').forEach((c) => c.classList.remove('active-account-border'));
+      card.classList.add('active-account-border');
+      selectedAccountForAction = card.dataset.account;
+      // Transactions list remains completely untouched here.
+    });
+
+    // Modal Triggers
+    card.querySelector('.fund-btn')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      selectedAccountForAction = card.dataset.account;
+      document.getElementById('fund-modal')?.classList.remove('hidden');
+    });
+
+    card.querySelector('.withdraw-btn')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      selectedAccountForAction = card.dataset.account;
+      document.getElementById('withdraw-modal')?.classList.remove('hidden');
+    });
+  };
+
+  document.querySelectorAll('.account-card').forEach(setupCardEvents);
+
+  // Modal Close Buttons
+  document.getElementById('close-fund-modal')?.addEventListener('click', () => document.getElementById('fund-modal').classList.add('hidden'));
+  document.getElementById('close-withdraw-modal')?.addEventListener('click', () => document.getElementById('withdraw-modal').classList.add('hidden'));
+  document.getElementById('close-add-modal')?.addEventListener('click', () => document.getElementById('add-account-modal').classList.add('hidden'));
+
+  // 5. Add Account -> Does NOT affect or touch transactions list
+  const addAccountCard = document.getElementById('add-account-card');
+
+  addAccountCard?.addEventListener('click', () => {
+    document.getElementById('add-account-modal').classList.remove('hidden');
+  });
+});
