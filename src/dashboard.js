@@ -7,23 +7,27 @@ document.addEventListener('DOMContentLoaded', () => {
   // notifications
   const notificationBtn = document.getElementById('notification-btn');
   const notificationDropdown = document.getElementById('notification-dropdown');
+  const notifBadge = document.getElementById('notif-badge'); 
 
   if (notificationBtn && notificationDropdown) {
     notificationBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       notificationDropdown.classList.toggle('hidden');
+      if (notifBadge) notifBadge.classList.add('hidden');
       closeOtherDropdowns(notificationDropdown);
     });
   }
 
-  // notifications (mobile top-bar version)
+  // notifications (mobile response )
   const notificationBtnMobile = document.getElementById('notification-btn-mobile');
   const notificationDropdownMobile = document.getElementById('notification-dropdown-mobile');
+  const notifBadgeMobile = document.getElementById('notif-badge-mobile'); 
 
   if (notificationBtnMobile && notificationDropdownMobile) {
     notificationBtnMobile.addEventListener('click', (e) => {
       e.stopPropagation();
       notificationDropdownMobile.classList.toggle('hidden');
+      if (notifBadgeMobile) notifBadgeMobile.classList.add('hidden');
       closeOtherDropdowns(notificationDropdownMobile);
     });
   }
@@ -154,7 +158,7 @@ if (toggleBalanceBtn) {
 });
 
 
-//Accounts scripts
+//ACCOUNT scripts
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -167,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const DEFAULT_TRANSACTIONS = [
     { name: 'Akanmu niyi', type: 'Bank Transfer', date: '06 Mar 2023 - 09:30', amount: -10000, status: 'Pending' },
     { name: 'Akanmu Qodri', type: 'Direct Pay', date: '06 Mar 2023 - 09:30', amount: 10000, status: 'Completed' },
-    { name: 'Adeniyi Qodir', type: 'Bank Transfer', date: '06 Mar 2023 - 09:28', amount: -10000, status: 'Canceled' }
+    { name: 'Adeniyi Qodri', type: 'Bank Transfer', date: '06 Mar 2023 - 09:28', amount: -10000, status: 'Canceled' }
   ];
 
   const STATUS_STYLES = {
@@ -190,45 +194,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const openModal = (id) => document.getElementById(id)?.classList.remove('hidden');
   const closeModal = (id) => document.getElementById(id)?.classList.add('hidden');
-
-  // Notification (desktop)
-  const notifBtn = document.getElementById('notification-btn');
-  const notifDropdown = document.getElementById('notification-dropdown');
-  const notifBadge = document.getElementById('notif-badge');
-
-  if (notifBtn && notifDropdown) {
-    notifBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      notifDropdown.classList.toggle('hidden');
-      if (notifBadge) notifBadge.classList.add('hidden');
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!notifDropdown.contains(e.target) && !notifBtn.contains(e.target)) {
-        notifDropdown.classList.add('hidden');
-      }
-    });
-  }
-
-  // Notification (mobile)
-  const notifBtnMobile = document.getElementById('notification-btn-mobile');
-  const notifDropdownMobile = document.getElementById('notification-dropdown-mobile');
-  const notifBadgeMobile = document.getElementById('notif-badge-mobile');
-
-  if (notifBtnMobile && notifDropdownMobile) {
-    notifBtnMobile.addEventListener('click', (e) => {
-      e.stopPropagation();
-      notifDropdownMobile.classList.toggle('hidden');
-      if (notifBadgeMobile) notifBadgeMobile.classList.add('hidden');
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!notifDropdownMobile.contains(e.target) && !notifBtnMobile.contains(e.target)) {
-        notifDropdownMobile.classList.add('hidden');
-      }
-    });
-  }
-
   const renderTransactions = () => {
     const listContainer = document.getElementById('transactions-list');
     if (!listContainer) return;
