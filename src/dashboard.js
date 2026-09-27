@@ -480,3 +480,135 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+
+document.querySelectorAll('.account-card').forEach(setupCardEvents);
+
+  // 5. Payment Method Switching logic
+  const directPayRadio = document.querySelector('input[value="Direct Pay"]');
+  const creditCardRadio = document.querySelector('input[value="Credit Card"]');
+  const creditCardFields = document.getElementById('credit-card-fields');
+  const btnDirectPay = document.getElementById('btn-direct-pay');
+  const btnCreditCard = document.getElementById('btn-credit-card');
+
+  const updatePaymentMethodUI = () => {
+    if (creditCardRadio?.checked) {
+      creditCardFields?.classList.remove('hidden');
+      btnCreditCard?.classList.add('border-emerald-500');
+      btnCreditCard?.classList.remove('border-gray-200');
+      btnDirectPay?.classList.remove('border-emerald-500');
+      btnDirectPay?.classList.add('border-gray-200');
+    } else {
+      creditCardFields?.classList.add('hidden');
+      btnDirectPay?.classList.add('border-emerald-500');
+      btnDirectPay?.classList.remove('border-gray-200');
+      btnCreditCard?.classList.remove('border-emerald-500');
+      btnCreditCard?.classList.add('border-gray-200');
+    }
+  };
+
+  directPayRadio?.addEventListener('change', updatePaymentMethodUI);
+  creditCardRadio?.addEventListener('change', updatePaymentMethodUI);
+
+  // 6. Modal Helpers
+  const openModal = (id) => document.getElementById(id)?.classList.remove('hidden');
+  const closeModal = (id) => document.getElementById(id)?.classList.add('hidden');
+
+  document.getElementById('close-fund-modal')?.addEventListener('click', () => closeModal('fund-modal'));
+  document.getElementById('close-withdraw-modal')?.addEventListener('click', () => closeModal('withdraw-modal'));
+  document.getElementById('close-add-modal')?.addEventListener('click', () => closeModal('add-account-modal'));
+  document.getElementById('close-success-btn')?.addEventListener('click', () => closeModal('success-modal'));
+
+  // 7. Funding Submission
+  document.getElementById('submit-fund-btn')?.addEventListener('click', () => {
+    const input = document.getElementById('fund-amount-input');
+    const amount = parseFloat(input?.value);
+
+    if (!amount || amount <= 0) return alert('Please enter a valid amount');
+
+    const paymentMethod = document.querySelector('input[name="payment_method"]:checked')?.value || 'Direct Pay';
+
+    accountBalances[selectedAccountForAction] = (accountBalances[selectedAccountForAction] || 0) + amount;
+
+    initialTransactions.unshift({
+      name: 'Maureen Oguche',
+      type: paymentMethod,
+      method: paymentMethod,
+      date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) + ' - ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      amount: amount,
+      status: 'Completed'
+    });
+
+    renderTransactions();
+    closeModal('fund-modal');
+
+    document.getElementById('success-message-text').textContent = `₦ ${amount.toLocaleString()} has been added to ${selectedAccountForAction}!`;
+    openModal('success-modal');
+    if (input) input.value = '';
+  });
+
+  // 8. Withdrawal Submission
+  document.getElementById('submit-withdraw-btn')?.addEventListener('click', () => {
+    const input = document.getElementById('withdraw-amount-input');
+    const amount = parseFloat(input?.value);
+
+    if (!amount || amount <= 0) return alert('Please enter a valid amount');
+
+    accountBalances[selectedAccountForAction] = (accountBalances[selectedAccountForAction] || 0) - amount;
+
+    initialTransactions.unshift({
+      name: 'Maureen Oguche',
+      type: 'Bank Transfer',
+      method: 'Bank Transfer',
+      date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) + ' - ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      amount: -amount,
+      status: 'Completed'
+    });
+
+    renderTransactions();
+    closeModal('withdraw-modal');
+
+    document.getElementById('success-message-text').textContent = `₦ ${amount.toLocaleString()} withdrawal was successful!`;
+    openModal('success-modal');
+    if (input) input.value = '';
+  });
+
+  // 9. Add New Account
+  const addAccountCard = document.getElementById('add-account-card');
+
+  addAccountCard?.addEventListener('click', () => {
+    openModal('add-account-modal');
+  });
+
+  document.getElementById('submit-add-account-btn')?.addEventListener('click', () => {
+    const nameInput = document.getElementById('new-account-name');
+    const accountName = nameInput?.value.trim();
+
+    if (!accountName) return alert('Please enter an account name');
+
+    accountBalances[accountName] = 0;
+
+    const newCard = document.createElement('div');
+    newCard.className = 'account-card bg-[#d8f3e5] p-5 rounded-2xl relative transition cursor-pointer shadow-sm';
+    newCard.dataset.account = accountName;
+    newCard.innerHTML = `
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-xs font-semibold text-emerald-800">${accountName}</span>
+        <button class="toggle-eye-btn p-1 text-gray-600 hover:text-gray-900 transition" aria-label="Toggle Balance Visibility">
+          ${eyeClosedSvg}
+        </button>
+      </div>
+      <p class="account-balance text-xl font-bold text-gray-900 mb-5">*****</p>
+      <div class="flex items-center gap-2">
+        <button class="fund-btn bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-medium px-4 py-2 rounded-lg transition flex-1">Fund</button>
+        <button class="withdraw-btn bg-gray-300 hover:bg-gray-400 text-gray-800 text-xs font-medium px-4 py-2 rounded-lg transition flex-1">Withdraw</button>
+      </div>
+    `;
+
+    setupCardEvents(newCard);
+    addAccountCard.replaceWith(newCard);
+    closeModal('add-account-modal');
+
+    document.getElementById('success-message-text').textContent = `Account "${accountName}" created successfully!`;
+    openModal('success-modal');
+  });
