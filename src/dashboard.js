@@ -158,7 +158,6 @@ if (toggleBalanceBtn) {
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  // local storage 
   const DEFAULT_ACCOUNTS = {
     'Main Account': 44500,
     'School Savings': 44500,
@@ -166,29 +165,33 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const DEFAULT_TRANSACTIONS = [
-    { name: 'Akanmu Qodri', type: 'Bank Transfer', date: '06 Mar 2023 - 09:30', amount: -10000, status: 'Pending', statusBg: 'bg-gray-300 text-gray-700' },
-    { name: 'Adeniyi Qodri', type: 'Direct Pay', date: '06 Mar 2023 - 09:30', amount: 10000, status: 'Completed', statusBg: 'bg-emerald-500 text-white' },
-    { name: 'Akanmu Adeniyi', type: 'Bank Transfer', date: '06 Mar 2023 - 09:28', amount: -10000, status: 'Canceled', statusBg: 'bg-rose-500 text-white' }
+    { name: 'Akanmu niyi', type: 'Bank Transfer', date: '06 Mar 2023 - 09:30', amount: -10000, status: 'Pending' },
+    { name: 'Akanmu Qodri', type: 'Direct Pay', date: '06 Mar 2023 - 09:30', amount: 10000, status: 'Completed' },
+    { name: 'Adeniyi Qodir', type: 'Bank Transfer', date: '06 Mar 2023 - 09:28', amount: -10000, status: 'Canceled' }
   ];
 
-  let accountBalances = JSON.parse(localStorage.getItem('reen_accounts')) || DEFAULT_ACCOUNTS;
-  let transactions = JSON.parse(localStorage.getItem('reen_transactions')) || DEFAULT_TRANSACTIONS;
-  let customAccountAdded = localStorage.getItem('reen_custom_account_added') === 'true';
+  const STATUS_STYLES = {
+    'Completed': 'bg-emerald-500 text-white',
+    'Pending': 'bg-gray-300 text-gray-700',
+    'Canceled': 'bg-rose-500 text-white'
+  };
 
+  let accountBalances = JSON.parse(localStorage.getItem('reen_accounts')) || DEFAULT_ACCOUNTS;
+  let initialTransactions = JSON.parse(localStorage.getItem('reen_transactions')) || DEFAULT_TRANSACTIONS;
   let selectedAccountForAction = 'Main Account';
 
-  // SVG Icons
   const eyeOpenSvg = `<svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>`;
   const eyeClosedSvg = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-7 0-10-7-10-7a17.88 17.88 0 013.586-4.586m3.172-2.172A9.97 9.97 0 0112 5c7 0 10 7 10 7a17.86 17.86 0 01-2.43 3.32M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" /></svg>`;
 
-  // Helper: Sync data to localStorage
   const saveData = () => {
     localStorage.setItem('reen_accounts', JSON.stringify(accountBalances));
-    localStorage.setItem('reen_transactions', JSON.stringify(transactions));
-    localStorage.setItem('reen_custom_account_added', customAccountAdded ? 'true' : 'false');
+    localStorage.setItem('reen_transactions', JSON.stringify(initialTransactions));
   };
 
-  // Notification dropdown proposed fix 
+  const openModal = (id) => document.getElementById(id)?.classList.remove('hidden');
+  const closeModal = (id) => document.getElementById(id)?.classList.add('hidden');
+
+  // Notification (desktop)
   const notifBtn = document.getElementById('notification-btn');
   const notifDropdown = document.getElementById('notification-dropdown');
   const notifBadge = document.getElementById('notif-badge');
@@ -196,13 +199,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (notifBtn && notifDropdown) {
     notifBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      const isHidden = notifDropdown.classList.contains('hidden');
-      if (isHidden) {
-        notifDropdown.classList.remove('hidden');
-        if (notifBadge) notifBadge.classList.add('hidden');
-      } else {
-        notifDropdown.classList.add('hidden');
-      }
+      notifDropdown.classList.toggle('hidden');
+      if (notifBadge) notifBadge.classList.add('hidden');
     });
 
     document.addEventListener('click', (e) => {
@@ -212,17 +210,36 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // rendering trx histories frm storage 
+  // Notification (mobile)
+  const notifBtnMobile = document.getElementById('notification-btn-mobile');
+  const notifDropdownMobile = document.getElementById('notification-dropdown-mobile');
+  const notifBadgeMobile = document.getElementById('notif-badge-mobile');
+
+  if (notifBtnMobile && notifDropdownMobile) {
+    notifBtnMobile.addEventListener('click', (e) => {
+      e.stopPropagation();
+      notifDropdownMobile.classList.toggle('hidden');
+      if (notifBadgeMobile) notifBadgeMobile.classList.add('hidden');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!notifDropdownMobile.contains(e.target) && !notifBtnMobile.contains(e.target)) {
+        notifDropdownMobile.classList.add('hidden');
+      }
+    });
+  }
+
   const renderTransactions = () => {
     const listContainer = document.getElementById('transactions-list');
     if (!listContainer) return;
 
     listContainer.innerHTML = '';
-    transactions.forEach((tx) => {
+    initialTransactions.forEach((tx) => {
       const isPositive = tx.amount > 0;
       const sign = isPositive ? '+' : '-';
       const colorClass = isPositive ? 'text-emerald-500' : 'text-rose-500';
       const symbolBg = isPositive ? 'bg-emerald-500' : 'bg-rose-500';
+      const statusClass = STATUS_STYLES[tx.status] || 'bg-gray-300 text-gray-700';
 
       const row = document.createElement('div');
       row.className = 'flex items-center justify-between gap-2 lg:gap-0 py-2 border-b border-gray-100 text-xs';
@@ -236,13 +253,12 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <div class="hidden sm:block text-gray-400 text-[11px] shrink-0">${tx.date}</div>
         <div class="font-bold ${colorClass} shrink-0">${sign}${Math.abs(tx.amount).toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
-        <div class="shrink-0"><span class="px-3 py-1 rounded-md text-[10px] font-semibold ${tx.statusBg}">${tx.status}</span></div>
+        <div class="shrink-0"><span class="px-3 py-1 rounded-md text-[10px] font-semibold ${statusClass}">${tx.status}</span></div>
       `;
       listContainer.appendChild(row);
     });
   };
 
-  // Acount cards
   const setupCardEvents = (card) => {
     card.addEventListener('click', () => {
       document.querySelectorAll('.account-card').forEach((c) => c.classList.remove('active-account-border'));
@@ -273,218 +289,19 @@ document.addEventListener('DOMContentLoaded', () => {
     card.querySelector('.fund-btn')?.addEventListener('click', (e) => {
       e.stopPropagation();
       selectedAccountForAction = card.dataset.account;
-      document.getElementById('fund-modal')?.classList.remove('hidden');
+      openModal('fund-modal');
     });
 
     card.querySelector('.withdraw-btn')?.addEventListener('click', (e) => {
       e.stopPropagation();
       selectedAccountForAction = card.dataset.account;
-      document.getElementById('withdraw-modal')?.classList.remove('hidden');
-    });
-  };
-
-  //  Initial renering of account 
-  const renderAccounts = () => {
-    const grid = document.getElementById('accounts-grid');
-    const addCard = document.getElementById('add-account-card');
-    if (!grid) return;
-
-    // Remove old dynamic cards
-    grid.querySelectorAll('.account-card').forEach((card) => card.remove());
-
-    Object.keys(accountBalances).forEach((name, idx) => {
-      const card = document.createElement('div');
-      const isActive = idx === 0 ? 'active-account-border' : '';
-      card.className = `account-card ${isActive} bg-[#d8f3e5] p-5 rounded-2xl relative transition cursor-pointer shadow-sm`;
-      card.dataset.account = name;
-      card.innerHTML = `
-        <div class="flex items-center justify-between mb-3">
-          <span class="text-xs font-semibold text-[#46237A]">${name}</span>
-          <button class="toggle-eye-btn p-1 text-gray-600 hover:text-gray-900 transition" aria-label="Toggle Balance Visibility">
-            ${eyeClosedSvg}
-          </button>
-        </div>
-        <p class="account-balance text-xl font-bold text-gray-900 mb-5">*****</p>
-        <div class="flex items-center gap-2">
-          <button class="fund-btn bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-medium px-4 py-2 rounded-lg transition flex-1">Fund</button>
-          <button class="withdraw-btn bg-gray-300 hover:bg-gray-400 text-gray-800 text-xs font-medium px-4 py-2 rounded-lg transition flex-1">Withdraw</button>
-        </div>
-      `;
-      setupCardEvents(card);
-      grid.insertBefore(card, addCard);
-    });
-
-    // Hide Add Account card if one has already been created
-    if (customAccountAdded && addCard) {
-      addCard.classList.add('hidden');
-    }
-  };
-
-  // Modal action 
-  document.getElementById('close-fund-modal')?.addEventListener('click', () => document.getElementById('fund-modal').classList.add('hidden'));
-  document.getElementById('close-withdraw-modal')?.addEventListener('click', () => document.getElementById('withdraw-modal').classList.add('hidden'));
-  document.getElementById('close-add-modal')?.addEventListener('click', () => document.getElementById('add-account-modal').classList.add('hidden'));
-
-  // Submit Fund
-  document.getElementById('submit-fund-btn')?.addEventListener('click', () => {
-    const input = document.getElementById('fund-amount-input');
-    const amount = parseFloat(input?.value);
-
-    if (!amount || amount <= 0) return alert('Enter valid amount');
-
-    accountBalances[selectedAccountForAction] = (accountBalances[selectedAccountForAction] || 0) + amount;
-
-    transactions.unshift({
-      name: 'Akanmu Qodri',
-      type: 'Direct Pay',
-      date: 'Just Now',
-      amount: amount,
-      status: 'Completed',
-      statusBg: 'bg-emerald-500 text-white'
-    });
-
-    saveData();
-    renderTransactions();
-    document.getElementById('fund-modal').classList.add('hidden');
-    if (input) input.value = '';
-  });
-
-  // Submit Withdraw
-  document.getElementById('submit-withdraw-btn')?.addEventListener('click', () => {
-    const input = document.getElementById('withdraw-amount-input');
-    const amount = parseFloat(input?.value);
-
-    if (!amount || amount <= 0) return alert('Enter valid amount');
-
-    accountBalances[selectedAccountForAction] = (accountBalances[selectedAccountForAction] || 0) - amount;
-
-    transactions.unshift({
-      name: 'Akanmu Qodri',
-      type: 'Bank Transfer',
-      date: 'Just Now',
-      amount: -amount,
-      status: 'Completed',
-      statusBg: 'bg-emerald-500 text-white'
-    });
-
-    saveData();
-    renderTransactions();
-    document.getElementById('withdraw-modal').classList.add('hidden');
-    if (input) input.value = '';
-  });
-
-  // Submit Add Account
-  const addAccountCard = document.getElementById('add-account-card');
-  addAccountCard?.addEventListener('click', () => {
-    document.getElementById('add-account-modal').classList.remove('hidden');
-  });
-
-  document.getElementById('submit-add-account-btn')?.addEventListener('click', () => {
-    const input = document.getElementById('new-account-name');
-    const accountName = input?.value.trim();
-
-    if (!accountName) return alert('Please enter an account name');
-
-    accountBalances[accountName] = 0;
-    customAccountAdded = true;
-
-    saveData();
-    renderAccounts();
-
-    document.getElementById('add-account-modal').classList.add('hidden');
-    if (input) input.value = '';
-  });
-
-  // Run previous on reload
-  renderAccounts();
-  renderTransactions();
-});
-
-
-//This following codes Fix the notifications panel bug
-// When deleting codes It worked but I don't know why and how.
-
-document.addEventListener('DOMContentLoaded', () => {
-  // Notification Overlay
-  const notifBtn = document.getElementById('notification-btn');
-  const notifDropdown = document.getElementById('notification-dropdown');
-  const notifBadge = document.getElementById('notif-badge');
-  if (notifBtn && notifDropdown) {
-    notifBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      notifDropdown.classList.toggle('hidden');
-      if (notifBadge) notifBadge.classList.add('hidden');
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!notifDropdown.contains(e.target) && !notifBtn.contains(e.target)) {
-        notifDropdown.classList.add('hidden');
-      }
-    });
-  }
-
-  // 2. Setup Account Box Handlers (Strictly visual active border, NO transaction manipulation)
-  const setupCardEvents = (card) => {
-    card.addEventListener('click', () => {
-      document.querySelectorAll('.account-card').forEach((c) => c.classList.remove('active-account-border'));
-      card.classList.add('active-account-border');
-      selectedAccountForAction = card.dataset.account;
-      // Transactions list remains completely untouched here.
-    });
-
-    // Modal Triggers
-    card.querySelector('.fund-btn')?.addEventListener('click', (e) => {
-      e.stopPropagation();
-      selectedAccountForAction = card.dataset.account;
-      document.getElementById('fund-modal')?.classList.remove('hidden');
-    });
-
-    card.querySelector('.withdraw-btn')?.addEventListener('click', (e) => {
-      e.stopPropagation();
-      selectedAccountForAction = card.dataset.account;
-      document.getElementById('withdraw-modal')?.classList.remove('hidden');
+      openModal('withdraw-modal');
     });
   };
 
   document.querySelectorAll('.account-card').forEach(setupCardEvents);
 
-  // Modal Close Buttons
-  document.getElementById('close-fund-modal')?.addEventListener('click', () => document.getElementById('fund-modal').classList.add('hidden'));
-  document.getElementById('close-withdraw-modal')?.addEventListener('click', () => document.getElementById('withdraw-modal').classList.add('hidden'));
-  document.getElementById('close-add-modal')?.addEventListener('click', () => document.getElementById('add-account-modal').classList.add('hidden'));
-
-  // 5. Add Account -> Does NOT affect or touch transactions list
-  const addAccountCard = document.getElementById('add-account-card');
-
-  addAccountCard?.addEventListener('click', () => {
-    document.getElementById('add-account-modal').classList.remove('hidden');
-  });
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-  const notifBtnMobile = document.getElementById('notification-btn-mobile');
-  const notifDropdownMobile = document.getElementById('notification-dropdown-mobile');
-  const notifBadgeMobile = document.getElementById('notif-badge-mobile');
-
-  if (notifBtnMobile && notifDropdownMobile) {
-    notifBtnMobile.addEventListener('click', (e) => {
-      e.stopPropagation();
-      notifDropdownMobile.classList.toggle('hidden');
-      if (notifBadgeMobile) notifBadgeMobile.classList.add('hidden');
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!notifDropdownMobile.contains(e.target) && !notifBtnMobile.contains(e.target)) {
-        notifDropdownMobile.classList.add('hidden');
-      }
-    });
-  }
-});
-
-
-document.querySelectorAll('.account-card').forEach(setupCardEvents);
-
-  // 5. Payment Method Switching logic
+  // Payment method switching (Fund modal)
   const directPayRadio = document.querySelector('input[value="Direct Pay"]');
   const creditCardRadio = document.querySelector('input[value="Credit Card"]');
   const creditCardFields = document.getElementById('credit-card-fields');
@@ -510,16 +327,13 @@ document.querySelectorAll('.account-card').forEach(setupCardEvents);
   directPayRadio?.addEventListener('change', updatePaymentMethodUI);
   creditCardRadio?.addEventListener('change', updatePaymentMethodUI);
 
-  // 6. Modal Helpers
-  const openModal = (id) => document.getElementById(id)?.classList.remove('hidden');
-  const closeModal = (id) => document.getElementById(id)?.classList.add('hidden');
-
+  // Modal close buttons
   document.getElementById('close-fund-modal')?.addEventListener('click', () => closeModal('fund-modal'));
   document.getElementById('close-withdraw-modal')?.addEventListener('click', () => closeModal('withdraw-modal'));
   document.getElementById('close-add-modal')?.addEventListener('click', () => closeModal('add-account-modal'));
   document.getElementById('close-success-btn')?.addEventListener('click', () => closeModal('success-modal'));
 
-  // 7. Funding Submission
+  // Fund submission
   document.getElementById('submit-fund-btn')?.addEventListener('click', () => {
     const input = document.getElementById('fund-amount-input');
     const amount = parseFloat(input?.value);
@@ -533,21 +347,22 @@ document.querySelectorAll('.account-card').forEach(setupCardEvents);
     initialTransactions.unshift({
       name: 'Maureen Oguche',
       type: paymentMethod,
-      method: paymentMethod,
       date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) + ' - ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       amount: amount,
       status: 'Completed'
     });
 
+    saveData();
     renderTransactions();
     closeModal('fund-modal');
 
-    document.getElementById('success-message-text').textContent = `₦ ${amount.toLocaleString()} has been added to ${selectedAccountForAction}!`;
+    const successText = document.getElementById('success-message-text');
+    if (successText) successText.textContent = `₦ ${amount.toLocaleString()} has been added to ${selectedAccountForAction}!`;
     openModal('success-modal');
     if (input) input.value = '';
   });
 
-  // 8. Withdrawal Submission
+  // Withdrawal submission
   document.getElementById('submit-withdraw-btn')?.addEventListener('click', () => {
     const input = document.getElementById('withdraw-amount-input');
     const amount = parseFloat(input?.value);
@@ -559,21 +374,22 @@ document.querySelectorAll('.account-card').forEach(setupCardEvents);
     initialTransactions.unshift({
       name: 'Maureen Oguche',
       type: 'Bank Transfer',
-      method: 'Bank Transfer',
       date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) + ' - ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       amount: -amount,
       status: 'Completed'
     });
 
+    saveData();
     renderTransactions();
     closeModal('withdraw-modal');
 
-    document.getElementById('success-message-text').textContent = `₦ ${amount.toLocaleString()} withdrawal was successful!`;
+    const successText = document.getElementById('success-message-text');
+    if (successText) successText.textContent = `₦ ${amount.toLocaleString()} withdrawal was successful!`;
     openModal('success-modal');
     if (input) input.value = '';
   });
 
-  // 9. Add New Account
+  // Add new account
   const addAccountCard = document.getElementById('add-account-card');
 
   addAccountCard?.addEventListener('click', () => {
@@ -583,25 +399,27 @@ document.querySelectorAll('.account-card').forEach(setupCardEvents);
   document.getElementById('submit-add-account-btn')?.addEventListener('click', () => {
     const nameInput = document.getElementById('new-account-name');
     const accountName = nameInput?.value.trim();
+    const descInput = document.getElementById('new-account-desc');
 
     if (!accountName) return alert('Please enter an account name');
 
     accountBalances[accountName] = 0;
+    saveData();
 
     const newCard = document.createElement('div');
-    newCard.className = 'account-card bg-[#d8f3e5] p-5 rounded-2xl relative transition cursor-pointer shadow-sm';
+    newCard.className = 'account-card bg-[#d8f3e5] p-4 lg:p-5 rounded-2xl relative transition cursor-pointer shadow-sm';
     newCard.dataset.account = accountName;
     newCard.innerHTML = `
       <div class="flex items-center justify-between mb-3">
-        <span class="text-xs font-semibold text-emerald-800">${accountName}</span>
+        <span class="text-xs font-semibold text-[#46237A]">${accountName}</span>
         <button class="toggle-eye-btn p-1 text-gray-600 hover:text-gray-900 transition" aria-label="Toggle Balance Visibility">
           ${eyeClosedSvg}
         </button>
       </div>
-      <p class="account-balance text-xl font-bold text-gray-900 mb-5">*****</p>
+      <p class="account-balance text-base lg:text-xl font-bold text-gray-900 mb-3 lg:mb-5">*****</p>
       <div class="flex items-center gap-2">
-        <button class="fund-btn bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-medium px-4 py-2 rounded-lg transition flex-1">Fund</button>
-        <button class="withdraw-btn bg-gray-300 hover:bg-gray-400 text-gray-800 text-xs font-medium px-4 py-2 rounded-lg transition flex-1">Withdraw</button>
+        <button class="fund-btn bg-emerald-500 hover:bg-emerald-600 text-white text-[11px] lg:text-xs font-medium px-2 lg:px-4 py-2 rounded-lg transition flex-1">Fund</button>
+        <button class="withdraw-btn bg-gray-300 hover:bg-gray-400 text-gray-800 text-[11px] lg:text-xs font-medium px-2 lg:px-4 py-2 rounded-lg transition flex-1">Withdraw</button>
       </div>
     `;
 
@@ -609,6 +427,13 @@ document.querySelectorAll('.account-card').forEach(setupCardEvents);
     addAccountCard.replaceWith(newCard);
     closeModal('add-account-modal');
 
-    document.getElementById('success-message-text').textContent = `Account "${accountName}" created successfully!`;
+    const successText = document.getElementById('success-message-text');
+    if (successText) successText.textContent = `Account "${accountName}" created successfully!`;
     openModal('success-modal');
+
+    if (nameInput) nameInput.value = '';
+    if (descInput) descInput.value = '';
   });
+
+  renderTransactions();
+});
