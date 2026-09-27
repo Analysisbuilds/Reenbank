@@ -8,6 +8,7 @@
       "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
+    --color-red-50: oklch(97.1% 0.013 17.38);
     --color-red-300: oklch(80.8% 0.114 19.571);
     --color-red-400: oklch(70.4% 0.191 22.216);
     --color-red-500: oklch(63.7% 0.237 25.331);
@@ -1030,6 +1031,11 @@
   .gap-y-12 {
     row-gap: calc(var(--spacing) * 12);
   }
+  .truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
   .overflow-hidden {
     overflow: hidden;
   }
@@ -1967,6 +1973,9 @@
     .hover\:bg-gray-400:hover {
       background-color: var(--color-gray-400);
     }
+    .hover\:bg-red-50:hover {
+      background-color: var(--color-red-50);
+    }
     .hover\:bg-slate-100\/60:hover {
       background-color: color-mix(in srgb, oklch(96.8% 0.007 247.896) 60%, transparent);
     }
@@ -2205,6 +2214,9 @@
     .lg\:mt-2 {
       margin-top: calc(var(--spacing) * 2);
     }
+    .lg\:mb-5 {
+      margin-bottom: calc(var(--spacing) * 5);
+    }
     .lg\:mb-16 {
       margin-bottom: calc(var(--spacing) * 16);
     }
@@ -2232,6 +2244,12 @@
     .lg\:flex-1 {
       flex: 1;
     }
+    .lg\:flex-none {
+      flex: none;
+    }
+    .lg\:grid-cols-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
     .lg\:grid-cols-12 {
       grid-template-columns: repeat(12, minmax(0, 1fr));
     }
@@ -2240,6 +2258,12 @@
     }
     .lg\:justify-start {
       justify-content: flex-start;
+    }
+    .lg\:gap-0 {
+      gap: 0px;
+    }
+    .lg\:gap-4 {
+      gap: calc(var(--spacing) * 4);
     }
     .lg\:gap-20 {
       gap: calc(var(--spacing) * 20);
@@ -2278,11 +2302,17 @@
       border-bottom-style: var(--tw-border-style);
       border-bottom-width: 0px;
     }
+    .lg\:p-5 {
+      padding: calc(var(--spacing) * 5);
+    }
     .lg\:p-8 {
       padding: calc(var(--spacing) * 8);
     }
     .lg\:p-12 {
       padding: calc(var(--spacing) * 12);
+    }
+    .lg\:px-4 {
+      padding-inline: calc(var(--spacing) * 4);
     }
     .lg\:px-6 {
       padding-inline: calc(var(--spacing) * 6);
@@ -2341,6 +2371,10 @@
     .lg\:text-xl {
       font-size: var(--text-xl);
       line-height: var(--tw-leading, var(--text-xl--line-height));
+    }
+    .lg\:text-xs {
+      font-size: var(--text-xs);
+      line-height: var(--tw-leading, var(--text-xs--line-height));
     }
     .lg\:shadow {
       --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));

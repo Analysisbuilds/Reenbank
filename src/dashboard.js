@@ -225,18 +225,18 @@ document.addEventListener('DOMContentLoaded', () => {
       const symbolBg = isPositive ? 'bg-emerald-500' : 'bg-rose-500';
 
       const row = document.createElement('div');
-      row.className = 'flex items-center justify-between py-2 border-b border-gray-100 text-xs';
+      row.className = 'flex items-center justify-between gap-2 lg:gap-0 py-2 border-b border-gray-100 text-xs';
       row.innerHTML = `
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3 min-w-0 flex-1 lg:flex-none">
           <div class="w-7 h-7 rounded-full ${symbolBg} text-white flex items-center justify-center font-bold">${sign}</div>
-          <div>
-            <p class="font-bold text-gray-800">${tx.name}</p>
+          <div class="min-w-0">
+            <p class="font-bold text-gray-800 truncate">${tx.name}</p>
             <p class="text-gray-400 text-[10px]">${tx.type}</p>
           </div>
         </div>
-        <div class="text-gray-400 text-[11px]">${tx.date}</div>
-        <div class="font-bold ${colorClass}">${sign}${Math.abs(tx.amount).toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
-        <div><span class="px-3 py-1 rounded-md text-[10px] font-semibold ${tx.statusBg}">${tx.status}</span></div>
+        <div class="hidden sm:block text-gray-400 text-[11px] shrink-0">${tx.date}</div>
+        <div class="font-bold ${colorClass} shrink-0">${sign}${Math.abs(tx.amount).toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
+        <div class="shrink-0"><span class="px-3 py-1 rounded-md text-[10px] font-semibold ${tx.statusBg}">${tx.status}</span></div>
       `;
       listContainer.appendChild(row);
     });
@@ -299,7 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
       card.dataset.account = name;
       card.innerHTML = `
         <div class="flex items-center justify-between mb-3">
-          <span class="text-xs font-semibold text-emerald-800">${name}</span>
+          <span class="text-xs font-semibold text-[#46237A]">${name}</span>
           <button class="toggle-eye-btn p-1 text-gray-600 hover:text-gray-900 transition" aria-label="Toggle Balance Visibility">
             ${eyeClosedSvg}
           </button>
@@ -459,4 +459,24 @@ document.addEventListener('DOMContentLoaded', () => {
   addAccountCard?.addEventListener('click', () => {
     document.getElementById('add-account-modal').classList.remove('hidden');
   });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const notifBtnMobile = document.getElementById('notification-btn-mobile');
+  const notifDropdownMobile = document.getElementById('notification-dropdown-mobile');
+  const notifBadgeMobile = document.getElementById('notif-badge-mobile');
+
+  if (notifBtnMobile && notifDropdownMobile) {
+    notifBtnMobile.addEventListener('click', (e) => {
+      e.stopPropagation();
+      notifDropdownMobile.classList.toggle('hidden');
+      if (notifBadgeMobile) notifBadgeMobile.classList.add('hidden');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!notifDropdownMobile.contains(e.target) && !notifBtnMobile.contains(e.target)) {
+        notifDropdownMobile.classList.add('hidden');
+      }
+    });
+  }
 });
