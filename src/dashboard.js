@@ -345,7 +345,7 @@ document.addEventListener('DOMContentLoaded', () => {
     accountBalances[selectedAccountForAction] = (accountBalances[selectedAccountForAction] || 0) + amount;
 
     initialTransactions.unshift({
-      name: 'Maureen Oguche',
+      name: 'Akanmu Qodri',
       type: paymentMethod,
       date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) + ' - ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       amount: amount,
@@ -372,7 +372,7 @@ document.addEventListener('DOMContentLoaded', () => {
     accountBalances[selectedAccountForAction] = (accountBalances[selectedAccountForAction] || 0) - amount;
 
     initialTransactions.unshift({
-      name: 'Maureen Oguche',
+      name: 'Akanmu Qodri',
       type: 'Bank Transfer',
       date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) + ' - ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       amount: -amount,
