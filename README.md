@@ -26,6 +26,7 @@ A responsive, front-end banking demo built with **HTML, Tailwind CSS and JavaScr
 | profile.js | Profile page, logout modal, reset-password overlays |
 
 Script order on each page: store.js, then the page's own script.
+
 ---
 
 **Features**
