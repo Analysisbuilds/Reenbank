@@ -49,9 +49,60 @@ document.addEventListener('DOMContentLoaded', () => {
     const verifyForm = document.getElementById('verify-form');
     const successCard = document.getElementById('success-card');
 
+    // CHANGED: OTP countdown + pending user state
+    const OTP_SECONDS = 59;
+    const otpBoxes = document.querySelectorAll('.otp-box');
+    const timerBox = document.getElementById('countdown-timer')?.parentElement;
+    const timerOriginalHTML = timerBox ? timerBox.innerHTML : '';
+    let countdownInterval = null;
+    let pendingUser = null;
+
+    // CHANGED
+    const stopCountdown = () => clearInterval(countdownInterval);
+
+    // CHANGED
+    const startCountdown = () => {
+      if (!timerBox) return;
+      stopCountdown();
+      let remaining = OTP_SECONDS;
+      timerBox.innerHTML = timerOriginalHTML;
+      const timerEl = document.getElementById('countdown-timer');
+      const show = () => { timerEl.textContent = `0:${String(remaining).padStart(2, '0')}`; };
+      show();
+      countdownInterval = setInterval(() => {
+        remaining--;
+        if (remaining <= 0) {
+          stopCountdown();
+          timerBox.innerHTML = '<button type="button" id="resend-link" class="hover:underline cursor-pointer">Resend code</button>';
+          return;
+        }
+        show();
+      }, 1000);
+    };
+
+    // CHANGED
+    const resendCode = () => {
+      otpBoxes.forEach((box) => { box.value = ''; });
+      otpBoxes[0]?.focus();
+      startCountdown();
+    };
+
+    // CHANGED
+    timerBox?.addEventListener('click', (e) => {
+      if (e.target.id === 'resend-link') resendCode();
+    });
+    verifyForm?.querySelector('button[type="button"]')?.addEventListener('click', resendCode);
+
     // Switch when submit
     registerForm?.addEventListener('submit', (e) => {
       e.preventDefault();
+
+      // CHANGED: keep details until OTP is verified
+      pendingUser = {
+        name: registerForm.querySelector('input[type="text"]').value.trim(),
+        email: userEmailInput.value.trim().toLowerCase(),
+        password: document.getElementById('password-input').value
+      };
 
       // asterik in  email
       const email = userEmailInput.value;
@@ -68,11 +119,20 @@ document.addEventListener('DOMContentLoaded', () => {
       
       verifyCard.classList.remove('hidden');
       verifyCard.classList.add('block');
+
+      startCountdown(); // CHANGED
     });
 
     //(Verify Email -> Success Screen)
-    verifyForm.addEventListener('submit', (e) => {
+    verifyForm?.addEventListener('submit', (e) => {
       e.preventDefault();
+
+      // CHANGED: save the user and create the account
+      if (pendingUser) {
+        ReenStore.registerUser(pendingUser);
+        pendingUser = null;
+      }
+      stopCountdown();
 
       verifyCard.classList.add('hidden');
       verifyCard.classList.remove('block');
@@ -82,7 +142,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // GoBack to register when clicking Change
-    backToRegister.addEventListener('click', () => {
+    backToRegister?.addEventListener('click', () => {
+      stopCountdown(); // CHANGED
       verifyCard.classList.add('hidden');
       verifyCard.classList.remove('block');
       
@@ -91,7 +152,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Auto - next input for OTP digit
-    const otpBoxes = document.querySelectorAll('.otp-box');
     otpBoxes.forEach((box, idx) => {
     box.addEventListener('focus', () => box.select());
     box.addEventListener('click', () => box.select());
@@ -116,7 +176,7 @@ const togglePasswordBtn = document.getElementById('toggle-password');
 const eyeIcon = document.getElementById('eye-icon');
 const eyeOffIcon = document.getElementById('eye-off-icon');
 
-togglePasswordBtn.addEventListener('click', () => {
+togglePasswordBtn?.addEventListener('click', () => { // CHANGED: null-safe
   const isPassword = passwordInput.getAttribute('type') === 'password';
   
   // Switch input type
@@ -133,10 +193,16 @@ document.getElementById('signup-form')?.addEventListener('submit', function(even
   window.location.href = `register.html?email=${encodeURIComponent(email)}`;
 });
 
-document.getElementById('login-form').addEventListener('submit', function(e) {
+// CHANGED: null-safe + check against the registered user
+document.getElementById('login-form')?.addEventListener('submit', function(e) {
   e.preventDefault(); // no default browser reload
 
-  //  validation or API login requests (later) {Backend}
+  const user = ReenStore.getUser();
+  const email = this.querySelector('input[type="email"]').value.trim().toLowerCase();
+  const password = document.getElementById('password-input').value;
+
+  if (!user) return alert('No account found. Please register first.');
+  if (user.email !== email || user.password !== password) return alert('Incorrect email or password.');
   
   // Redirect to dashboard page
   window.location.href = 'dashboard.html';
@@ -175,4 +241,3 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target === logoutModal) closeModal();
   });
 });
-
