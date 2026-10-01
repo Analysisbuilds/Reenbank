@@ -49,18 +49,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const verifyForm = document.getElementById('verify-form');
     const successCard = document.getElementById('success-card');
 
-    // CHANGED: OTP countdown + pending user state
+    // OTP countdown + pending user state
     const OTP_SECONDS = 59;
     const otpBoxes = document.querySelectorAll('.otp-box');
     const timerBox = document.getElementById('countdown-timer')?.parentElement;
     const timerOriginalHTML = timerBox ? timerBox.innerHTML : '';
     let countdownInterval = null;
     let pendingUser = null;
-
-    // CHANGED
     const stopCountdown = () => clearInterval(countdownInterval);
-
-    // CHANGED
     const startCountdown = () => {
       if (!timerBox) return;
       stopCountdown();
@@ -79,15 +75,11 @@ document.addEventListener('DOMContentLoaded', () => {
         show();
       }, 1000);
     };
-
-    // CHANGED
     const resendCode = () => {
       otpBoxes.forEach((box) => { box.value = ''; });
       otpBoxes[0]?.focus();
       startCountdown();
     };
-
-    // CHANGED
     timerBox?.addEventListener('click', (e) => {
       if (e.target.id === 'resend-link') resendCode();
     });
@@ -97,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
     registerForm?.addEventListener('submit', (e) => {
       e.preventDefault();
 
-      // CHANGED: keep details until OTP is verified
+      // keep details until OTP is verified
       pendingUser = {
         name: registerForm.querySelector('input[type="text"]').value.trim(),
         email: userEmailInput.value.trim().toLowerCase(),
@@ -143,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // GoBack to register when clicking Change
     backToRegister?.addEventListener('click', () => {
-      stopCountdown(); // CHANGED
+      stopCountdown(); 
       verifyCard.classList.add('hidden');
       verifyCard.classList.remove('block');
       
@@ -176,7 +168,7 @@ const togglePasswordBtn = document.getElementById('toggle-password');
 const eyeIcon = document.getElementById('eye-icon');
 const eyeOffIcon = document.getElementById('eye-off-icon');
 
-togglePasswordBtn?.addEventListener('click', () => { // CHANGED: null-safe
+togglePasswordBtn?.addEventListener('click', () => { // null-safe
   const isPassword = passwordInput.getAttribute('type') === 'password';
   
   // Switch input type
@@ -193,7 +185,7 @@ document.getElementById('signup-form')?.addEventListener('submit', function(even
   window.location.href = `register.html?email=${encodeURIComponent(email)}`;
 });
 
-// CHANGED: null-safe + check against the registered user
+// null-safe + check against the registered user
 document.getElementById('login-form')?.addEventListener('submit', function(e) {
   e.preventDefault(); // no default browser reload
 

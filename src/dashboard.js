@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // CHANGED: guard + shared data
+  // guard + shared data
   if (!ReenStore.requireUser()) return;
   ReenStore.applyUser();
   ReenStore.applyAvatar();
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // CHANGED: period helpers (current year, last 3 months)
+  // period helpers (current year, last 3 months)
   const MONTHS_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const MONTHS_FULL = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   const monthRange = (offset) => {
@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // CHANGED: overview rendering from localStorage
+  //overview rendering from localStorage
   const ensureExtraAccountCards = () => {
     const balEls = [...document.querySelectorAll('.balance-text')];
     const labels = balEls.map((el) => el.previousElementSibling?.textContent.trim());
@@ -218,12 +218,12 @@ if (toggleBalanceBtn) {
     });
 }
 
-  // CHANGED: + button leads to Accounts page
+  // here + button leads to Accounts page
   document.querySelector('button[aria-label="Add Account"]')?.addEventListener('click', () => {
     window.location.href = 'accounts.html';
   });
 
-  renderOverview(); // CHANGED
+  renderOverview(); 
 
   // Mobile trnx panel
   const navTransactionsBtn = document.getElementById('nav-transactions');
@@ -290,8 +290,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const listContainer = document.getElementById('transactions-list');
     if (!listContainer) return;
 
-    const txs = ReenStore.getTransactions(); // CHANGED
-    if (!txs.length) { // CHANGED
+    const txs = ReenStore.getTransactions();
+    if (!txs.length) { 
       listContainer.innerHTML = '<p class="text-center text-gray-400 text-xs" style="padding:1rem 0">No transaction yet</p>';
       return;
     }
@@ -322,7 +322,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  // CHANGED: refresh only balances that are currently revealed
+  // refresh only balances that are currently revealed
   const updateVisibleBalances = () => {
     const accounts = ReenStore.getAccounts();
     document.querySelectorAll('.account-card').forEach((card) => {
@@ -370,7 +370,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  // CHANGED: card builder shared by "add account" and page load
+  //card builder shared by "add account" and page load
   const createAccountCard = (accountName) => {
     const newCard = document.createElement('div');
     newCard.className = 'account-card bg-[#d8f3e5] p-4 lg:p-5 rounded-2xl relative transition cursor-pointer shadow-sm';
@@ -394,7 +394,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('.account-card').forEach(setupCardEvents);
 
-  // CHANGED: restore saved extra accounts
+  // restore saved extra accounts
   ReenStore.getExtra().forEach(({ name }) => {
     if (document.querySelector(`.account-card[data-account="${CSS.escape(name)}"]`)) return;
     const card = createAccountCard(name);
@@ -444,18 +444,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const paymentMethod = document.querySelector('input[name="payment_method"]:checked')?.value || 'Direct Pay';
 
-    const accounts = ReenStore.getAccounts(); // CHANGED
+    const accounts = ReenStore.getAccounts();
     accounts[selectedAccountForAction] = (accounts[selectedAccountForAction] || 0) + amount;
     ReenStore.saveAccounts(accounts);
 
-    ReenStore.addTransaction({ // CHANGED
+    ReenStore.addTransaction({ 
       name: ReenStore.getUser().name,
       type: paymentMethod,
       amount: amount,
       status: 'Completed',
       account: selectedAccountForAction
     });
-    ReenStore.addNotification({ // CHANGED
+    ReenStore.addNotification({ 
       before: 'You added',
       amount: amount,
       after: `to your ${selectedAccountForAction}`,
@@ -463,8 +463,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     renderTransactions();
-    updateVisibleBalances(); // CHANGED
-    ReenStore.renderNotifications(); // CHANGED
+    updateVisibleBalances(); 
+    ReenStore.renderNotifications(); 
     closeModal('fund-modal');
 
     const successText = document.getElementById('success-message-text');
@@ -489,14 +489,14 @@ document.addEventListener('DOMContentLoaded', () => {
     accounts[selectedAccountForAction] -= amount;
     ReenStore.saveAccounts(accounts);
 
-    ReenStore.addTransaction({ // CHANGED
+    ReenStore.addTransaction({
       name: recipient || 'External Account',
       type: 'Bank Transfer',
       amount: -amount,
       status: 'Completed',
       account: selectedAccountForAction
     });
-    ReenStore.addNotification({ // CHANGED
+    ReenStore.addNotification({
       before: recipient ? 'You sent' : 'You withdrew',
       amount: amount,
       after: recipient ? `to ${recipient}` : `from your ${selectedAccountForAction}`,
@@ -504,15 +504,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     renderTransactions();
-    updateVisibleBalances(); // CHANGED
-    ReenStore.renderNotifications(); // CHANGED
+    updateVisibleBalances(); 
+    ReenStore.renderNotifications();
     closeModal('withdraw-modal');
 
     const successText = document.getElementById('success-message-text');
     if (successText) successText.textContent = `₦ ${amount.toLocaleString()} withdrawal was successful!`;
     openModal('success-modal');
     if (input) input.value = '';
-    textInputs.forEach((t) => { t.value = ''; }); // CHANGED
+    textInputs.forEach((t) => { t.value = ''; }); 
   });
 
   // Add new account
@@ -528,9 +528,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!accountName) return alert('Please enter an account name');
     if (accountName in ReenStore.getAccounts()) return alert('An account with this name already exists'); // CHANGED
 
-    ReenStore.addExtra(accountName, descInput?.value.trim() || ''); // CHANGED
+    ReenStore.addExtra(accountName, descInput?.value.trim() || '');
 
-    const newCard = createAccountCard(accountName); // CHANGED
+    const newCard = createAccountCard(accountName); 
     const addCard = document.getElementById('add-account-card');
     if (addCard) addCard.replaceWith(newCard);
     else document.getElementById('accounts-grid').appendChild(newCard);

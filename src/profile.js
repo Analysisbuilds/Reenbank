@@ -1,19 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-  // CHANGED: guard + shared data
+  // guard + shared data
   if (!ReenStore.requireUser()) return;
   ReenStore.applyUser();
   ReenStore.applyAvatar();
   ReenStore.renderNotifications();
 
-  // --- 1. LOCAL STORAGE STATE INITIALIZATION ---
+  // local storage init.......... ---
   const DEFAULT_PHONE = '+234 000 0000 000';
   const DEFAULT_GENDER = 'Male';
 
   let savedPhone = localStorage.getItem('reen_user_phone') || DEFAULT_PHONE;
   let savedGender = localStorage.getItem('reen_user_gender') || DEFAULT_GENDER;
 
-  // CHANGED: balances and transactions come from the shared store
+  //  balances and transactions come from the shared store
   const accountBalances = ReenStore.getAccounts();
   const transactions = ReenStore.getTransactions();
 
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (phoneValue) phoneValue.textContent = savedPhone;
   if (genderValue) genderValue.textContent = savedGender;
 
-  // --- 2. MOBILE SEARCH TOGGLE ---
+  //mobile search ---
   const mobileSearchBtn = document.getElementById('mobile-search-toggle');
   const searchContainer = document.getElementById('search-input-container');
 
@@ -37,8 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     searchContainer?.classList.toggle('hidden');
   });
 
-  // --- 3. EDITABLE PROFILE IMAGE ---
-  // CHANGED: image is resized before saving so localStorage does not overflow
+  // image is resized before saving so localStorage does not overflow
   const resizeImage = (file, done) => {
     const reader = new FileReader();
     reader.onload = (event) => {
@@ -61,14 +60,14 @@ document.addEventListener('DOMContentLoaded', () => {
   imageUploadInput?.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (file) {
-      resizeImage(file, (dataUrl) => { // CHANGED
+      resizeImage(file, (dataUrl) => { 
         if (!ReenStore.setImage(dataUrl)) return alert('Could not save the image. Try a smaller one.');
         ReenStore.applyAvatar();
       });
     }
   });
 
-  // --- 4. EDITABLE PHONE NUMBER ---
+  // phone number ---
   const editPhoneBtn = document.getElementById('edit-phone-btn');
   const phoneContainer = document.getElementById('phone-display-container');
 
@@ -91,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // --- 5. EDITABLE GENDER ---
+  // --- rditable gender---
   const editGenderBtn = document.getElementById('edit-gender-btn');
   const genderContainer = document.getElementById('gender-display-container');
 
@@ -116,8 +115,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // --- 6. MAIN ACCOUNT BALANCE TOGGLE ---
-  // CHANGED: supports the id (desktop) and the .main-account-balance / .toggle-account-eye classes (extra mobile copies)
+  // main account balance toggle ---
+  //  supports the id (desktop) and the .main-account-balance / .toggle-account-eye classes (extra mobile copies)
   const balanceTexts = document.querySelectorAll('#main-account-balance, .main-account-balance');
   const toggleEyeBtns = document.querySelectorAll('#toggle-account-eye, .toggle-account-eye');
   let isBalanceVisible = false;
@@ -133,11 +132,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // --- 7. RENDER SIDE TRANSACTIONS ---
+  // lander transactions ---
   const sideTransactionsList = document.getElementById('side-transactions-list');
   if (sideTransactionsList) {
     sideTransactionsList.innerHTML = '';
-    if (!transactions.length) { // CHANGED
+    if (!transactions.length) { 
       sideTransactionsList.innerHTML = '<p class="text-center text-gray-400 text-[11px]" style="padding:1rem 0">No transaction yet</p>';
     }
     transactions.slice(0, 8).forEach((tx) => {
@@ -156,8 +155,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- 8. NOTIFICATION DROPDOWN TOGGLE ---
-  // CHANGED: handles desktop + mobile pairs, badge comes back on new notifications
+
+  // fix handles desktop + mobile pairs, badge comes back on new notifications
   const notifPairs = [
     [document.getElementById('notification-btn'), document.getElementById('notification-dropdown')],
     [document.getElementById('notification-btn-mobile'), document.getElementById('notification-dropdown-mobile')]
@@ -180,8 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // --- 9. LOGOUT MODAL ---
-  // CHANGED: same modal as dashboard/accounts, injected so profile.html markup stays untouched
+  //  same pop up as dashboard/accounts, injected so profile.html markup stays untouched
   if (!document.getElementById('logout-modal')) {
     document.body.insertAdjacentHTML('beforeend', `
       <div 
