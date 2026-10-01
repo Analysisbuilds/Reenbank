@@ -219,6 +219,199 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+
+  // Password reset Overlays. injected 
+  const rpInput = 'w-full px-3 py-1.5 text-xs rounded-md border border-slate-200 focus:outline-none focus:border-[#34be82] focus:ring-1 focus:ring-[#34be82] text-slate-800 placeholder-slate-400 pr-8';
+  const rpOtp = 'rp-otp w-full h-9 text-center text-xs font-semibold border border-slate-200 rounded-md focus:outline-none focus:border-[#34be82] focus:ring-1 focus:ring-[#34be82] text-slate-800';
+  const rpBtn = 'w-full py-2 bg-[#34be82] hover:bg-[#2ca872] text-white font-bold text-xs rounded-md transition-colors duration-200 shadow-sm cursor-pointer';
+  const rpCard = 'bg-white shadow-[0px_0px_40px_#34be82] rounded-2xl p-5 sm:p-6 max-w-sm w-full';
+  const rpLock = '<svg class="w-3.5 h-3.5 absolute right-2.5 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>';
+
+  if (!document.getElementById('reset-modal')) {
+    document.body.insertAdjacentHTML('beforeend', `
+      <div id="reset-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs hidden items-center justify-center p-4 z-60 flex">
+
+        <div data-rp-step="1" class="${rpCard}">
+          <h2 class="text-xl font-bold text-[#34be82] mb-4">Reset Password</h2>
+          <form id="rp-email-form" class="space-y-3">
+            <div class="space-y-0.5">
+              <label class="block text-[10px] font-semibold text-black tracking-wide">Email</label>
+              <div class="relative flex items-center">
+                <input id="rp-email" type="email" placeholder="Enter your Email" class="${rpInput}" required />
+                <svg class="w-3.5 h-3.5 absolute right-2.5 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+              </div>
+              <p id="rp-email-error" class="hidden text-[10px] text-red-500"></p>
+            </div>
+            <button type="submit" class="${rpBtn}">Reset Password</button>
+          </form>
+        </div>
+
+        <div data-rp-step="2" class="hidden ${rpCard}">
+          <h2 class="text-xl font-bold text-[#34be82] mb-2">Enter Otp</h2>
+          <p class="text-[11px] text-slate-400 mb-3 leading-tight">
+            A 6-digit code has been sent to your email <span id="rp-email-masked" class="text-slate-600 font-medium"></span>
+            <button type="button" id="rp-change" class="text-[#34be82] font-semibold hover:underline cursor-pointer">Change</button>
+          </p>
+          <form id="rp-otp-form" class="space-y-3">
+            <div class="grid grid-cols-6 gap-1.5">
+              ${('<input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="' + rpOtp + '" required />').repeat(6)}
+            </div>
+            <div id="rp-timer-box" class="text-[11px] font-semibold text-[#34be82]"><span id="rp-countdown">0:59</span> remaining</div>
+            <button type="submit" class="${rpBtn}">Confirm</button>
+            <p class="text-[10px] text-slate-400 text-left pt-0.5">
+              <button type="button" id="rp-resend-btn" class="text-[#34be82] font-semibold hover:underline cursor-pointer"></button>
+            </p>
+          </form>
+        </div>
+
+        <div data-rp-step="3" class="hidden ${rpCard}">
+          <h2 class="text-xl font-bold text-[#34be82] mb-4">Enter new Password</h2>
+          <form id="rp-password-form" class="space-y-3">
+            <div class="space-y-0.5">
+              <label class="block text-[10px] font-semibold text-black tracking-wide">New Password</label>
+              <div class="relative flex items-center">
+                <input id="rp-new-password" type="password" placeholder="Enter your Password" class="${rpInput}" required />
+                ${rpLock}
+              </div>
+            </div>
+            <div class="space-y-0.5">
+              <label class="block text-[10px] font-semibold text-black tracking-wide">Retype Password</label>
+              <div class="relative flex items-center">
+                <input id="rp-retype-password" type="password" placeholder="Retype your Password" class="${rpInput}" required />
+                ${rpLock}
+              </div>
+              <p id="rp-password-error" class="hidden text-[10px] text-red-500"></p>
+            </div>
+            <button type="submit" class="${rpBtn}">Change Password</button>
+          </form>
+        </div>
+
+        <div data-rp-step="4" class="hidden ${rpCard}">
+          <p class="text-xs sm:text-sm font-medium text-slate-700 mt-10 mb-6">Your password has been changed!</p>
+          <button type="button" id="rp-go-back" class="${rpBtn}">Go Back</button>
+        </div>
+
+      </div>`);
+  }
+
+  const resetModal = document.getElementById('reset-modal');
+  const rpSteps = resetModal.querySelectorAll('[data-rp-step]');
+  const rpOtpBoxes = resetModal.querySelectorAll('.rp-otp');
+  const rpTimerBox = document.getElementById('rp-timer-box');
+  const rpTimerHTML = rpTimerBox.innerHTML;
+  let rpInterval = null;
+
+  const rpShowStep = (n) => rpSteps.forEach((s) => s.classList.toggle('hidden', s.dataset.rpStep !== String(n)));
+  const rpShowError = (id, msg) => {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.classList.toggle('hidden', !msg);
+  };
+
+  const rpStopTimer = () => clearInterval(rpInterval);
+  const rpStartTimer = () => {
+    rpStopTimer();
+    let remaining = 59;
+    rpTimerBox.innerHTML = rpTimerHTML;
+    const el = document.getElementById('rp-countdown');
+    const show = () => { el.textContent = `0:${String(remaining).padStart(2, '0')}`; };
+    show();
+    rpInterval = setInterval(() => {
+      remaining--;
+      if (remaining <= 0) {
+        rpStopTimer();
+        rpTimerBox.innerHTML = '<button type="button" id="rp-resend-link" class="hover:underline cursor-pointer">Resend code</button>';
+        return;
+      }
+      show();
+    }, 1000);
+  };
+  const rpResend = () => {
+    rpOtpBoxes.forEach((b) => { b.value = ''; });
+    rpOtpBoxes[0].focus();
+    rpStartTimer();
+  };
+
+  const openReset = () => {
+    resetModal.querySelectorAll('form').forEach((f) => f.reset());
+    rpShowError('rp-email-error', '');
+    rpShowError('rp-password-error', '');
+    rpShowStep(1);
+    resetModal.classList.remove('hidden');
+  };
+  const closeReset = () => {
+    rpStopTimer();
+    resetModal.classList.add('hidden');
+  };
+
+  resetModal.addEventListener('click', (e) => {
+    if (e.target === resetModal) closeReset();
+  });
+
+  document.getElementById('rp-email-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('rp-email').value.trim().toLowerCase();
+    if (email !== ReenStore.getUser().email) return rpShowError('rp-email-error', 'This email does not match your account.');
+    rpShowError('rp-email-error', '');
+    const parts = email.split('@');
+    document.getElementById('rp-email-masked').textContent = `${parts[0].length > 2 ? parts[0].substring(0, 2) : parts[0]}****@${parts[1]}`;
+    rpShowStep(2);
+    rpStartTimer();
+  });
+
+  document.getElementById('rp-change').addEventListener('click', () => {
+    rpStopTimer();
+    rpShowStep(1);
+  });
+
+  rpTimerBox.addEventListener('click', (e) => {
+    if (e.target.id === 'rp-resend-link') rpResend();
+  });
+  document.getElementById('rp-resend-btn').addEventListener('click', rpResend);
+
+  rpOtpBoxes.forEach((box, idx) => {
+    box.addEventListener('focus', () => box.select());
+    box.addEventListener('keyup', (e) => {
+      if (['Tab', 'Shift', 'Meta', 'Control', 'Alt'].includes(e.key)) return;
+      if (box.value.length === 1 && idx < rpOtpBoxes.length - 1 && e.key !== 'Backspace') rpOtpBoxes[idx + 1].focus();
+    });
+    box.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' && !box.value && idx > 0) rpOtpBoxes[idx - 1].focus();
+    });
+  });
+
+  document.getElementById('rp-otp-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    rpStopTimer();
+    rpShowStep(3);
+  });
+
+  document.getElementById('rp-password-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const newPassword = document.getElementById('rp-new-password').value;
+    const retype = document.getElementById('rp-retype-password').value;
+    if (newPassword.length < 6) return rpShowError('rp-password-error', 'Password must be at least 6 characters.');
+    if (newPassword !== retype) return rpShowError('rp-password-error', 'Passwords do not match.');
+    rpShowError('rp-password-error', '');
+
+    const storedUser = JSON.parse(localStorage.getItem('reen_user'));
+    storedUser.password = newPassword;
+    localStorage.setItem('reen_user', JSON.stringify(storedUser));
+
+    rpShowStep(4);
+  });
+
+  document.getElementById('rp-go-back').addEventListener('click', closeReset);
+
+  document.querySelectorAll('button, a, [data-reset-password]').forEach((el) => {
+    if (el.closest('#reset-modal')) return;
+    const isTrigger = el.id === 'reset-password-btn' || el.hasAttribute('data-reset-password') || el.textContent.trim().toLowerCase() === 'reset password';
+    if (!isTrigger) return;
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      openReset();
+    });
+  });
 });
 
 

@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
       verifyCard.classList.remove('hidden');
       verifyCard.classList.add('block');
 
-      startCountdown(); // CHANGED
+      startCountdown(); 
     });
 
     //(Verify Email -> Success Screen)
