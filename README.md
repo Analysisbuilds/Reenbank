@@ -1,35 +1,33 @@
 # Reen Bank
 
-A responsive, front-end banking demo built with **HTML, Tailwind CSS and vanilla JavaScript**. All data lives in the browser's `localStorage`, so no backend is needed to try the full flow: register, verify, fund, withdraw, track transactions and manage a profile.
-
+A responsive, front-end banking demo built with **HTML, Tailwind CSS and JavaScript**. All data lives in the browser's localStorage, so no backend is needed to try the full flow: register, verify, fund, withdraw, track transactions and manage a profile.
 ---
 
-## Pages
+**Pages**
 
 | Page | Purpose |
 |---|---|
-| `index.html` | Landing page: services, FAQs, sign-up email capture |
-| `register.html` | Sign-up form, OTP verification popup, success screen |
-| `login.html` | Login checked against the registered user |
-| `dashboard.html` | Overview: balances, accounts, statistics, transactions, notifications |
-| `accounts.html` | Fund, withdraw and add accounts, with a transaction list |
-| `transactions.html` | Full transaction list, filtered by account, with search |
-| `profile.html` | User details, photo, phone, gender, password reset, logout |
+| index.html | Landing page: services, FAQs, sign-up email capture |
+| register.html | Sign-up form, OTP verification popup, success screen |
+| login.html | Login checked against the registered user |
+| dashboard.html | Overview: balances, accounts, statistics, transactions, notifications |
+| accounts.html | Fund, withdraw and add accounts, with a transaction list |
+| transactions.html | Full transaction list, filtered by account, with search |
+| profile.html | User details, photo, phone, gender, password reset, logout |
 
-## Project files
+**Project files**
 
 | File | Role |
 |---|---|
-| `store.js` | Shared data layer. Load it **before** every other script |
-| `script.js` | Landing page, register, OTP countdown, login |
-| `dashboard.js` | Overview, accounts and transactions pages |
-| `profile.js` | Profile page, logout modal, reset-password overlays |
+| store.js | Shared data layer. Load it **before** every other script |
+| script.js | Landing page, register, OTP countdown, login |
+| dashboard.js | Overview, accounts and transactions pages |
+| profile.js | Profile page, logout modal, reset-password overlays |
 
-Script order on each page: `store.js`, then the page's own script.
-
+Script order on each page: store.js, then the page's own script.
 ---
 
-## Features
+**Features**
 
 **Register and login**
 - Details are saved only after the OTP step is completed.
@@ -58,34 +56,32 @@ Script order on each page: `store.js`, then the page's own script.
 - Logout modal.
 
 Every page has mobile and desktop layouts.
-
 ---
 
-## Data model (`localStorage`)
+**Data model (`localStorage`)**
 
 | Key | Contents |
 |---|---|
-| `reen_user` | `{ name, email, password, accountNumber }` |
-| `reen_accounts` | Balance per account name |
-| `reen_extra_accounts` | Accounts added by the user, with description |
-| `reen_transactions` | Newest first: name, type, amount, status, account, timestamp |
-| `reen_notifications` | Newest first, capped at 50 |
-| `reen_notif_unread` | Controls the red notification dot |
-| `reen_user_image` | Profile photo (data URL); empty means the person icon |
-| `reen_user_phone`, `reen_user_gender` | Profile fields |
+| reen_user | { name, email, password, accountNumber } |
+| reen_accounts | Balance per account name |
+| reen_extra_accounts | Accounts added by the user, with description |
+| reen_transactions | Newest first: name, type, amount, status, account, timestamp |
+| reen_notifications | Newest first, capped at 50 |
+| reen_notif_unread | Controls the red notification dot |
+| reen_user_image | Profile photo (data URL); empty means the person icon |
+| reen_user_phone, reen_user_gender | Profile fields |
 
 Registering again clears all of the above for a fresh start.
 
-## How balances work
+**How balances work**
 
 - Funding adds to an account and counts as **income**.
 - Withdrawing subtracts from it and counts as **expense**.
 - **Current Balance** is the total of all accounts.
 - Overview, Accounts, Transactions and Profile all read the same stored values.
-
 ---
 
-## Known limitations
+**Known limitations**
 
 This is a front-end demo, so it must not be used with real money or real credentials.
 
@@ -95,9 +91,9 @@ This is a front-end demo, so it must not be used with real money or real credent
 - Anyone with browser dev tools can edit balances and transactions.
 - Clearing browser data erases the account.
 
-## Developed by Akanmu Qodri Adeniyi
-## Github = Analysisbuilds
-## Linkedin = Qodri Akanmu
+**Developed by Akanmu Qodri Adeniyi**
+**Github = Analysisbuilds**
+**Linkedin = Qodri Akanmu**
 
 
 
