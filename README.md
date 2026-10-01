@@ -57,6 +57,7 @@ Script order on each page: store.js, then the page's own script.
 - Logout modal.
 
 Every page has mobile and desktop layouts.
+
 ---
 
 **Data model (`localStorage`)**
@@ -80,6 +81,7 @@ Registering again clears all of the above for a fresh start.
 - Withdrawing subtracts from it and counts as **expense**.
 - **Current Balance** is the total of all accounts.
 - Overview, Accounts, Transactions and Profile all read the same stored values.
+
 ---
 
 **Known limitations**
