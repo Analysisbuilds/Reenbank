@@ -232,6 +232,11 @@ if (toggleBalanceBtn) {
   if (navTransactionsBtn && transactionsPanel) {
     navTransactionsBtn.addEventListener('click', (e) => {
       e.preventDefault();
+
+      if (window.innerWidth >= 1024) { // CHANGED
+        window.location.href = 'transactions.html';
+        return;
+}
       
       // On mobile, toggle eys of transaction 
       if (window.innerWidth < 1024) {
@@ -545,4 +550,108 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   renderTransactions();
+});
+
+
+//TRANSACTIONS  scripts
+
+document.addEventListener('DOMContentLoaded', () => {
+  const list = document.getElementById('txn-page-list');
+  if (!list || !ReenStore.getUser()) return;
+
+  const grid = document.getElementById('txn-accounts-grid');
+  const searchInputs = document.querySelectorAll('.txn-search');
+
+  const STATUS_STYLES = {
+    'Completed': 'bg-emerald-500 text-white',
+    'Pending': 'bg-gray-300 text-gray-700',
+    'Canceled': 'bg-rose-500 text-white'
+  };
+
+  const eyeOpenSvg = `<svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>`;
+  const eyeClosedSvg = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-7 0-10-7-10-7a17.88 17.88 0 013.586-4.586m3.172-2.172A9.97 9.97 0 0112 5c7 0 10 7 10 7a17.86 17.86 0 01-2.43 3.32M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" /></svg>`;
+
+  let selectedAccount = 'Main Account';
+  let searchQuery = '';
+
+  const renderList = () => {
+    const all = ReenStore.getTransactions();
+    const q = searchQuery.trim().toLowerCase();
+
+    const txs = all.filter((tx) => {
+      if ((tx.account || 'Main Account') !== selectedAccount) return false;
+      if (!q) return true;
+      const haystack = [tx.name, tx.type, tx.status, ReenStore.fmt(Math.abs(tx.amount)), ReenStore.formatDate(tx.ts, 'dots')]
+        .join(' ').toLowerCase();
+      return haystack.includes(q);
+    });
+
+    if (!txs.length) {
+      list.innerHTML = `<p class="text-center text-gray-400 text-xs" style="padding:1rem 0">${all.length && q ? 'No matching transaction' : 'No transaction yet'}</p>`;
+      return;
+    }
+
+    list.innerHTML = txs.map((tx) => {
+      const positive = tx.amount > 0;
+      const sign = positive ? '+' : '-';
+      return `
+        <div class="flex items-center gap-3 py-3 border-b border-gray-100 text-xs">
+          <div class="w-7 h-7 shrink-0 rounded-full ${positive ? 'bg-emerald-500' : 'bg-rose-500'} text-white flex items-center justify-center font-bold">${sign}</div>
+          <div class="min-w-0 flex-1">
+            <p class="font-bold text-gray-800 truncate">${ReenStore.esc(tx.name)}</p>
+            <p class="lg:hidden text-gray-400 text-[10px]">${ReenStore.esc(tx.type)}</p>
+          </div>
+          <div class="hidden lg:block w-32 text-gray-500 font-semibold">${ReenStore.esc(tx.type)}</div>
+          <div class="hidden sm:block w-40 text-gray-400 text-[11px] shrink-0">${ReenStore.formatDate(tx.ts, 'dots')}</div>
+          <div class="w-24 text-right font-bold ${positive ? 'text-emerald-500' : 'text-rose-500'} shrink-0">${sign} ${ReenStore.fmt(Math.abs(tx.amount))}</div>
+          <div class="w-24 shrink-0"><span class="block py-1 rounded-md text-center text-[10px] font-semibold ${STATUS_STYLES[tx.status] || 'bg-gray-300 text-gray-700'}">${tx.status}</span></div>
+        </div>`;
+    }).join('');
+  };
+
+  const setupCard = (card) => {
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.txn-account-card').forEach((c) => c.classList.remove('active-account-border'));
+      card.classList.add('active-account-border');
+      selectedAccount = card.dataset.account;
+      renderList();
+    });
+
+    const eyeBtn = card.querySelector('.toggle-eye-btn');
+    const balanceText = card.querySelector('.account-balance');
+    eyeBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const visible = card.dataset.visible !== 'true';
+      card.dataset.visible = String(visible);
+      balanceText.textContent = visible ? `₦ ${ReenStore.fmt(ReenStore.getAccounts()[card.dataset.account] || 0)}` : '*****';
+      eyeBtn.innerHTML = visible ? eyeOpenSvg : eyeClosedSvg;
+    });
+  };
+
+  document.querySelectorAll('.txn-account-card').forEach(setupCard);
+
+  ReenStore.getExtra().forEach(({ name }) => {
+    if (document.querySelector(`.txn-account-card[data-account="${CSS.escape(name)}"]`)) return;
+    const card = document.createElement('div');
+    card.className = 'txn-account-card bg-[#d8f3e5] p-4 lg:p-5 rounded-2xl relative transition cursor-pointer shadow-sm';
+    card.dataset.account = name;
+    card.innerHTML = `
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-xs font-semibold text-[#46237A]">${ReenStore.esc(name)}</span>
+        <button class="toggle-eye-btn p-1 text-gray-600 hover:text-gray-900 transition" aria-label="Toggle Balance Visibility">${eyeClosedSvg}</button>
+      </div>
+      <p class="account-balance text-base lg:text-xl font-bold text-gray-900">*****</p>`;
+    setupCard(card);
+    grid.appendChild(card);
+  });
+
+  searchInputs.forEach((input) => {
+    input.addEventListener('input', () => {
+      searchQuery = input.value;
+      searchInputs.forEach((other) => { if (other !== input) other.value = searchQuery; });
+      renderList();
+    });
+  });
+
+  renderList();
 });
