@@ -96,7 +96,6 @@ This is a front-end demo, so it must not be used with real money or real credent
 - Clearing browser data erases the account.
 
 ### Developed by Akanmu Qodri Adeniyi
-
 - **Github - Analysisbuilds**
 - **Linkedin - Qodri Akanmu**
 
