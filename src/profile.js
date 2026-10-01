@@ -20,11 +20,11 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
   let transactions = JSON.parse(localStorage.getItem('reen_transactions')) || DEFAULT_TRANSACTIONS;
 
-  // Icons
+  // Eye Icons
   const eyeOpenSvg = `<svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>`;
   const eyeClosedSvg = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-7 0-10-7-10-7a17.88 17.88 0 013.586-4.586m3.172-2.172A9.97 9.97 0 0112 5c7 0 10 7 10 7a17.86 17.86 0 01-2.43 3.32M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" /></svg>`;
 
-  // Render initial profile data
+  // Initial Profile Display
   const profileImageDisplay = document.getElementById('profile-image-display');
   const headerAvatar = document.getElementById('header-avatar');
   const phoneValue = document.getElementById('phone-value');
@@ -35,7 +35,16 @@ document.addEventListener('DOMContentLoaded', () => {
   if (phoneValue) phoneValue.textContent = savedPhone;
   if (genderValue) genderValue.textContent = savedGender;
 
-  // --- 2. EDITABLE PROFILE IMAGE ---
+  // --- 2. MOBILE SEARCH TOGGLE ---
+  const mobileSearchBtn = document.getElementById('mobile-search-toggle');
+  const searchContainer = document.getElementById('search-input-container');
+
+  mobileSearchBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    searchContainer?.classList.toggle('hidden');
+  });
+
+  // --- 3. EDITABLE PROFILE IMAGE ---
   const imageUploadInput = document.getElementById('image-upload-input');
   imageUploadInput?.addEventListener('change', (e) => {
     const file = e.target.files[0];
@@ -51,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // --- 3. EDITABLE PHONE NUMBER ---
+  // --- 4. EDITABLE PHONE NUMBER ---
   const editPhoneBtn = document.getElementById('edit-phone-btn');
   const phoneContainer = document.getElementById('phone-display-container');
 
@@ -74,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // --- 4. EDITABLE GENDER ---
+  // --- 5. EDITABLE GENDER ---
   const editGenderBtn = document.getElementById('edit-gender-btn');
   const genderContainer = document.getElementById('gender-display-container');
 
@@ -99,10 +108,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // --- 5. MAIN ACCOUNT BALANCE TOGGLE (Default Masked) ---
+  // --- 6. MAIN ACCOUNT BALANCE TOGGLE (Desktop) ---
   const toggleEyeBtn = document.getElementById('toggle-account-eye');
   const balanceText = document.getElementById('main-account-balance');
-  let isBalanceVisible = false; // Hidden by default as requested
+  let isBalanceVisible = false;
 
   toggleEyeBtn?.addEventListener('click', () => {
     isBalanceVisible = !isBalanceVisible;
@@ -116,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // --- 6. RENDER SIDE TRANSACTIONS ---
+  // --- 7. RENDER SIDE TRANSACTIONS (Desktop) ---
   const sideTransactionsList = document.getElementById('side-transactions-list');
   if (sideTransactionsList) {
     sideTransactionsList.innerHTML = '';
@@ -136,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- 7. NOTIFICATION DROPDOWN TOGGLE ---
+  // --- 8. NOTIFICATION DROPDOWN TOGGLE ---
   const notifBtn = document.getElementById('notification-btn');
   const notifDropdown = document.getElementById('notification-dropdown');
   const notifBadge = document.getElementById('notif-badge');
@@ -152,6 +161,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('click', () => {
       notifDropdown.classList.add('hidden');
+      if (window.innerWidth < 1024 && searchContainer) {
+        searchContainer.classList.add('hidden');
+      }
     });
   }
 
