@@ -1,6 +1,7 @@
 ## Reen Bank
 
 A responsive, front-end banking demo built with **HTML, Tailwind CSS and JavaScript**. All data lives in the `browser's localStorage`, so no backend is needed to try the full flow: register, verify, fund, withdraw, track transactions and manage a profile.
+
 ---
 
 **Pages**
