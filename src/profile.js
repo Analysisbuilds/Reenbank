@@ -259,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div id="rp-timer-box" class="text-[11px] font-semibold text-[#34be82]"><span id="rp-countdown">0:59</span> remaining</div>
             <button type="submit" class="${rpBtn}">Confirm</button>
             <p class="text-[10px] text-slate-400 text-left pt-0.5">
-              <button type="button" id="rp-resend-btn" class="text-[#34be82] font-semibold hover:underline cursor-pointer"></button>
+            <button type="button" id="rp-resend-btn" class="text-[#34be82] font-semibold hover:underline cursor-pointer"></button>
             </p>
           </form>
         </div>

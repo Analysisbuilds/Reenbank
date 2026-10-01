@@ -89,6 +89,12 @@ document.addEventListener('DOMContentLoaded', () => {
     registerForm?.addEventListener('submit', (e) => {
       e.preventDefault();
 
+      //block duplicate email
+    const existingUser = ReenStore.getUser();
+    if (existingUser && existingUser.email === userEmailInput.value.trim().toLowerCase()) {
+    return alert('An account with this email already exists. Please log in.');
+}
+
       // keep details until OTP is verified
       pendingUser = {
         name: registerForm.querySelector('input[type="text"]').value.trim(),
