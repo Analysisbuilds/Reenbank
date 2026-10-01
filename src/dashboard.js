@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // notifications (mobile response )
+  // notifications on mobile 
   const notificationBtnMobile = document.getElementById('notification-btn-mobile');
   const notificationDropdownMobile = document.getElementById('notification-dropdown-mobile');
   const notifBadgeMobile = document.getElementById('notif-badge-mobile'); 
